@@ -4,16 +4,15 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
+from app.kb import registry as kb_registry
 from app.routes import explain, health, moments, sports
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Startup and shutdown lifecycle.
-
-    Future work: load knowledge base into memory and compute embeddings.
-    For Day 1 scaffolding, no startup work is required.
-    """
+    """Startup: load knowledge base and build retriever."""
+    settings = get_settings()
+    kb_registry.initialize(directory=settings.kb_directory)
     yield
 
 

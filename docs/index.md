@@ -30,6 +30,7 @@ Living documentation for the Laurel project. Treat this directory as a wiki: eve
 - [ADR-0001: Project structure and stack](decisions/adr-0001-project-structure-and-stack.md)
 - [ADR-0002: Visual feedback during capture](decisions/adr-0002-visual-feedback-during-capture.md)
 - [ADR-0003: Voice input via Web Speech API](decisions/adr-0003-voice-input-web-speech.md)
+- [ADR-0004: Local-first storage strategy](decisions/adr-0004-storage-strategy.md)
 
 ### Runbooks
 - [Local development](runbooks/local-development.md)
@@ -43,4 +44,5 @@ Living documentation for the Laurel project. Treat this directory as a wiki: eve
 
 Newest first. Each entry is one line.
 
+- **2026-04-28:** Days 2-9 shipped end-to-end. KB authored for all 6 sports (~9.4K words). Backend pipelines wired: KB ingestion + numpy retrieval, Gemini Vision/text via google-genai SDK with stub fallback for keyless dev, SSE streaming explain + follow-up endpoints, local moments persistence. Frontend pipelines: capture page with camera + file upload, MomentViewer with animated outline + streamed conversation, share link generation, /m/[id] public pages with @vercel/og dynamic OG images. ADR-0004 added. 23 backend tests pass. (agent)
 - **2026-04-28:** Day 1 scaffolding complete. Frontend builds (Next.js 16.2.4 + Tailwind 4 + Geist), backend tests pass (FastAPI + uv). ADRs 0001-0003 written. (agent)

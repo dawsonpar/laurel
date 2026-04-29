@@ -56,5 +56,9 @@ gcloud-key.json
 backend/kb/index.json
 backend/kb/embeddings.npy
 
+# Local moments store (dev share links persistence)
+backend/tmp/
+tmp/
+
 # Claude Code coordination (per CLAUDE.md)
 .claude-coord/

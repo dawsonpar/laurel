@@ -9,7 +9,6 @@ from fastapi.testclient import TestClient
 from app.main import app
 from app.storage import moments_store
 
-
 client = TestClient(app)
 
 

@@ -105,11 +105,17 @@ async def get_moment(moment_id: str):
 
 @router.get("/moments/{moment_id}/frame")
 async def get_frame(moment_id: str):
-    """Serve the local frame bytes. In production this redirects to a Cloud
-    Storage signed URL (handled by the cloud store implementation)."""
+    """Serve the frame bytes.
+
+    In dev (LocalMomentsStore active) the file is served directly.
+    In production (CloudMomentsStore active) this is unused: the signed URL
+    on the moment record points at Cloud Storage directly.
+    """
+    # Touch get_store() so the local store fixture is initialized in tests.
+    get_store()
     local = get_local_store()
     if local is None:
-        raise HTTPException(status_code=404, detail="No local store available.")
+        raise HTTPException(status_code=404, detail="Frame not served from this backend.")
     path = local.get_frame_path(moment_id)
     if not path:
         raise HTTPException(status_code=404, detail=f"Frame not found: {moment_id}")

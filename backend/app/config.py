@@ -24,6 +24,8 @@ class Settings(BaseSettings):
     embedding_model: str = "text-embedding-005"
     cors_allowed_origins: str = "http://localhost:3000"
     kb_directory: Path = Path(__file__).parent.parent / "kb" / "sports"
+    moments_bucket: str | None = None
+    firestore_collection: str = "laurel-moments"
 
     @property
     def cors_origins_list(self) -> list[str]:

@@ -11,7 +11,6 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
-
 SECTION_PATTERN = re.compile(r"^## (?P<section>.+)$", re.MULTILINE)
 
 # Sections that hold metadata, not retrievable content. Excluded from chunks.

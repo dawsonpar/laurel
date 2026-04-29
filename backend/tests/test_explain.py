@@ -9,9 +9,8 @@ import io
 
 from fastapi.testclient import TestClient
 
-from app.main import app
 from app.kb import registry as kb_registry
-
+from app.main import app
 
 client = TestClient(app)
 

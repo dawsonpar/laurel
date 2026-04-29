@@ -5,6 +5,8 @@ description = "Laurel backend: Olympic and Paralympic moment explainer powered b
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.136.1",
+    "google-cloud-firestore>=2.27.0",
+    "google-cloud-storage>=3.10.1",
     "google-genai>=1.73.1",
     "nanoid>=2.0.0",
     "numpy>=2.4.4",
@@ -32,4 +34,9 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "UP", "B", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+# Prompt content mirrors natural-language rules; line breaks would mangle
+# the prompt sent to Gemini.
+"app/ai/prompts.py" = ["E501"]
 

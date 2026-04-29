@@ -88,17 +88,25 @@ _local_store: LocalMomentsStore | None = None
 
 
 def get_store() -> MomentsStore:
-    """Factory. Local filesystem in dev, Cloud (TODO) when GCP creds present."""
+    """Factory. Cloud when MOMENTS_BUCKET + GCP project are set, else local."""
     global _store, _local_store
     if _store is not None:
         return _store
 
     settings = get_settings()
-    # CloudMomentsStore is left as a future implementation. For now, always
-    # use the local store; production will swap this when Cloud Storage +
-    # Firestore wiring is added.
-    root = Path("/tmp/laurel-moments") if settings.environment == "production" else Path(
-        "tmp/moments"
+
+    if settings.google_cloud_project and settings.moments_bucket:
+        from app.storage.cloud_moments_store import CloudMomentsStore
+
+        _store = CloudMomentsStore(
+            project=settings.google_cloud_project,
+            bucket_name=settings.moments_bucket,
+            collection=settings.firestore_collection,
+        )
+        return _store
+
+    root = (
+        Path("/tmp/laurel-moments") if settings.environment == "production" else Path("tmp/moments")
     )
     _local_store = LocalMomentsStore(root=root.resolve())
     _store = _local_store

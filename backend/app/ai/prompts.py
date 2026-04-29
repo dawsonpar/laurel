@@ -9,7 +9,6 @@ from __future__ import annotations
 
 from app.kb.retrieval import RetrievedChunk
 
-
 SYSTEM_PROMPT = """You are Laurel, a friendly Olympic and Paralympic explainer for casual TV viewers.
 
 Your job is to answer "what just happened?" or "is this a big deal?" using:
@@ -69,16 +68,17 @@ def build_followup_prompt(
 ) -> str:
     """Assemble a prompt for a conversational follow-up against an existing moment."""
     sport_hint = sport_name or "Unknown"
-    history_block = "\n".join(
-        f"{turn['role'].upper()}: {turn['content']}" for turn in history
-    )
+    history_block = "\n".join(f"{turn['role'].upper()}: {turn['content']}" for turn in history)
     if not history_block:
         history_block = "(No prior turns.)"
 
-    context_blocks = "\n\n".join(
-        f"[{chunk.chunk.sport_slug} / {chunk.chunk.section}]\n{chunk.chunk.text}"
-        for chunk in retrieved
-    ) or "(No new knowledge-base context retrieved.)"
+    context_blocks = (
+        "\n\n".join(
+            f"[{chunk.chunk.sport_slug} / {chunk.chunk.section}]\n{chunk.chunk.text}"
+            for chunk in retrieved
+        )
+        or "(No new knowledge-base context retrieved.)"
+    )
 
     return (
         f"{SYSTEM_PROMPT}\n\n"

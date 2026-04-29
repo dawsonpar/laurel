@@ -48,12 +48,13 @@ class StubGeminiClient:
         )
 
     async def stream_explanation(self, prompt: str) -> AsyncIterator[str]:
-        words = (
-            "This is a stub response while the backend runs without GCP credentials. "
-            "Connect a Google Cloud project to enable real Gemini synthesis. "
-            "The captured frame and knowledge-base context would be summarized here."
-        ).split()
-        for word in words:
+        message = (
+            "This is a stub response while the backend runs without GCP "
+            "credentials. Connect a Google Cloud project to enable real "
+            "Gemini synthesis. The captured frame and knowledge-base "
+            "context would be summarized here."
+        )
+        for word in message.split():
             await asyncio.sleep(0.02)
             yield word + " "
 

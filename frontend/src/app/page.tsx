@@ -29,8 +29,8 @@ export default function Home() {
           />
           <CtaCard
             href="/about"
-            label="See examples"
-            description="Memorable moments from past Games."
+            label="About Laurel"
+            description="Stack, demo scenarios, hackathon credits."
           />
         </nav>
 

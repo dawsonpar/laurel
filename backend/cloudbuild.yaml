@@ -1,0 +1,33 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -t
+      - $_REGION-docker.pkg.dev/$PROJECT_ID/laurel/laurel-backend:$SHORT_SHA
+      - -t
+      - $_REGION-docker.pkg.dev/$PROJECT_ID/laurel/laurel-backend:latest
+      - .
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - --all-tags
+      - $_REGION-docker.pkg.dev/$PROJECT_ID/laurel/laurel-backend
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - laurel-backend
+      - --image=$_REGION-docker.pkg.dev/$PROJECT_ID/laurel/laurel-backend:$SHORT_SHA
+      - --region=$_REGION
+      - --platform=managed
+      - --allow-unauthenticated
+      - --set-env-vars=ENVIRONMENT=production,GOOGLE_CLOUD_PROJECT=$PROJECT_ID,GOOGLE_CLOUD_LOCATION=$_REGION,MOMENTS_BUCKET=$_MOMENTS_BUCKET,CORS_ALLOWED_ORIGINS=$_CORS_ALLOWED_ORIGINS
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _REGION: us-central1
+  _MOMENTS_BUCKET: laurel-moments
+  _CORS_ALLOWED_ORIGINS: https://laurel.vercel.app

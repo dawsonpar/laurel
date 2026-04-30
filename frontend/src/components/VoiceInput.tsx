@@ -11,12 +11,6 @@ interface VoiceInputProps {
   disabled?: boolean;
 }
 
-/**
- * Browser-native speech-to-text via the Web Speech API. Falls back gracefully
- * when unsupported (the button stays hidden).
- *
- * No third-party vendor: see ADR-0003 for rationale.
- */
 export function VoiceInput({ onTranscript, disabled }: VoiceInputProps) {
   const [supported, setSupported] = useState(false);
   const [listening, setListening] = useState(false);
@@ -43,7 +37,9 @@ export function VoiceInput({ onTranscript, disabled }: VoiceInputProps) {
     recognition.continuous = false;
     recognition.interimResults = false;
 
-    recognition.onresult = (event: { results: { 0: { 0: { transcript: string } } } }) => {
+    recognition.onresult = (event: {
+      results: { 0: { 0: { transcript: string } } };
+    }) => {
       const transcript = event.results[0][0].transcript;
       onTranscript(transcript);
     };
@@ -63,15 +59,19 @@ export function VoiceInput({ onTranscript, disabled }: VoiceInputProps) {
       onClick={start}
       disabled={disabled}
       title={listening ? "Listening, tap to stop" : "Speak your question"}
-      className={`flex h-10 w-10 items-center justify-center rounded-md border transition disabled:opacity-50 ${
+      className={`flex h-11 w-11 items-center justify-center rounded-full border transition disabled:opacity-50 ${
         listening
-          ? "border-accent bg-accent text-accent-foreground"
-          : "border-border bg-background text-foreground hover:border-accent"
+          ? "border-gold bg-gold text-cream"
+          : "border-border bg-background text-foreground hover:border-laurel"
       }`}
       aria-pressed={listening}
       aria-label={listening ? "Stop voice input" : "Start voice input"}
+      style={
+        listening
+          ? { animation: "laurel-breathe 1.6s ease-in-out infinite" }
+          : undefined
+      }
     >
-      {/* Simple mic glyph; avoids icon dep for now. */}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"

@@ -3,39 +3,53 @@
 import Link from "next/link";
 import { useState } from "react";
 
-import { CameraCapture } from "@/components/CameraCapture";
+import { CaptureSurface } from "@/components/CaptureSurface";
+import { LaurelMark } from "@/components/LaurelMark";
 import { MomentViewer } from "@/components/MomentViewer";
 
 export default function CapturePage() {
   const [captured, setCaptured] = useState<Blob | null>(null);
 
   return (
-    <main className="flex flex-1 flex-col items-center px-6 py-12">
+    <main className="flex flex-1 flex-col items-center px-6 py-10">
       <div className="w-full max-w-xl">
-        <header className="mb-8">
+        <header className="mb-8 flex items-center justify-between">
           <Link
             href="/"
-            className="font-mono text-xs uppercase tracking-[0.2em] text-muted hover:text-accent"
+            className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-muted transition hover:text-laurel"
           >
-            ← Laurel
+            <span className="text-laurel">
+              <LaurelMark size={20} />
+            </span>
+            Laurel
           </Link>
-          <h1 className="mt-4 text-3xl font-semibold tracking-tight">
-            {captured ? "What just happened?" : "Capture a moment"}
-          </h1>
-          <p className="mt-2 text-sm leading-relaxed text-muted">
-            {captured
-              ? "Laurel is reading the frame and the rules."
-              : "Point your phone at the TV and tap the shutter, or upload a screenshot."}
-          </p>
+          {captured && (
+            <button
+              type="button"
+              onClick={() => setCaptured(null)}
+              className="text-xs uppercase tracking-[0.2em] text-muted hover:text-laurel"
+            >
+              New capture
+            </button>
+          )}
         </header>
 
+        {!captured && (
+          <div className="laurel-fade-up mb-6">
+            <h1 className="font-serif text-4xl font-medium tracking-tight text-foreground sm:text-5xl">
+              Capture a moment
+            </h1>
+            <p className="mt-2 text-sm leading-relaxed text-muted">
+              Laurel watches what you watch. Share your screen on a laptop,
+              point your phone at the TV, or upload a screenshot.
+            </p>
+          </div>
+        )}
+
         {captured ? (
-          <MomentViewer
-            image={captured}
-            onReset={() => setCaptured(null)}
-          />
+          <MomentViewer image={captured} onReset={() => setCaptured(null)} />
         ) : (
-          <CameraCapture onCapture={setCaptured} />
+          <CaptureSurface onCapture={setCaptured} />
         )}
       </div>
     </main>

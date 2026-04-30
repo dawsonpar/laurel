@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { LaurelMark } from "@/components/LaurelMark";
 import { SectionAccordion } from "@/components/SectionAccordion";
 import { fetchSport } from "@/lib/api";
 
@@ -27,6 +28,7 @@ const PRIORITY_SECTIONS = [
   "What to Look For",
   "Glossary",
   "Notable Records & Historical Context",
+  "Notable Records and Historical Context",
 ];
 
 export default async function SportDetail({ params }: PageProps) {
@@ -35,33 +37,44 @@ export default async function SportDetail({ params }: PageProps) {
   if (!sport) notFound();
 
   const sectionsList = orderSections(sport.sections);
+  const tone = sport.type === "Olympic" ? "text-laurel" : "text-gold-deep";
 
   return (
-    <main className="flex flex-1 flex-col items-center px-6 py-12">
+    <main className="flex flex-1 flex-col items-center px-6 py-10">
       <div className="w-full max-w-2xl">
-        <header className="mb-8">
+        <header className="mb-8 flex items-center justify-between">
           <Link
             href="/sports"
-            className="font-mono text-xs uppercase tracking-[0.2em] text-muted hover:text-accent"
+            className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-muted transition hover:text-laurel"
           >
-            ← All sports
+            <span className="text-laurel">
+              <LaurelMark size={20} />
+            </span>
+            All sports
           </Link>
-          <p className="mt-4 font-mono text-xs uppercase tracking-[0.2em] text-muted">
+        </header>
+
+        <div className="laurel-fade-up mb-8">
+          <p
+            className={`font-mono text-[10px] uppercase tracking-[0.28em] ${tone}`}
+          >
             {sport.type}
           </p>
-          <h1 className="mt-2 text-4xl font-semibold tracking-tight">{sport.name}</h1>
+          <h1 className="mt-2 font-serif text-5xl font-medium tracking-tight">
+            {sport.name}
+          </h1>
           {sport.parity_pair && (
-            <p className="mt-2 text-sm text-muted">
+            <p className="mt-3 text-sm text-muted">
               Parity pair:{" "}
               <Link
                 href={`/sports/${sport.parity_pair}`}
-                className="text-accent hover:underline"
+                className="text-laurel hover:underline"
               >
                 {humanizeSlug(sport.parity_pair)}
               </Link>
             </p>
           )}
-        </header>
+        </div>
 
         {sport.has_content ? (
           <SectionAccordion
@@ -71,7 +84,7 @@ export default async function SportDetail({ params }: PageProps) {
             }))}
           />
         ) : (
-          <p className="rounded-lg border border-dashed border-border bg-background p-6 text-sm text-muted">
+          <p className="rounded-2xl border border-dashed border-border bg-background p-6 text-sm text-muted">
             Content for this sport is being authored. Check back soon.
           </p>
         )}

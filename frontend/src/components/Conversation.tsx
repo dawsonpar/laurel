@@ -48,7 +48,7 @@ export function Conversation({
     setStreaming(true);
     setError(null);
 
-    const history: Turn[] = turns; // history is what came before this question
+    const history: Turn[] = turns;
     const stream = openFollowUpStream({
       momentId,
       question,
@@ -82,21 +82,19 @@ export function Conversation({
         {turns.slice(1).map((turn, i) => (
           <div
             key={i}
-            className={`rounded-lg border px-4 py-3 text-sm leading-relaxed ${
+            className={`laurel-fade-up rounded-2xl border px-4 py-3 text-sm leading-relaxed ${
               turn.role === "user"
-                ? "border-accent/30 bg-accent/5 self-end max-w-[85%] text-foreground"
+                ? "self-end max-w-[85%] border-laurel/30 bg-laurel/[0.04] text-foreground"
                 : "border-border bg-background text-foreground"
             }`}
           >
-            {turn.content || (
-              <span className="text-muted">Thinking...</span>
-            )}
+            {turn.content || <span className="text-muted">Thinking...</span>}
           </div>
         ))}
       </div>
 
       {error && (
-        <p className="rounded-md border border-border bg-background px-3 py-2 text-xs text-red-600 dark:text-red-400">
+        <p className="rounded-2xl border border-border bg-background px-4 py-3 text-xs text-red-700 dark:text-red-400">
           {error}
         </p>
       )}
@@ -108,7 +106,7 @@ export function Conversation({
           onChange={(e) => setDraft(e.target.value)}
           placeholder="Ask a follow-up. eg, was that a record?"
           disabled={streaming}
-          className="h-10 flex-1 rounded-md border border-border bg-background px-3 text-sm text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
+          className="h-11 flex-1 rounded-full border border-border bg-background px-5 text-sm text-foreground placeholder:text-muted focus:border-laurel focus:outline-none"
         />
         <VoiceInput
           onTranscript={(text) => setDraft(text)}
@@ -117,7 +115,7 @@ export function Conversation({
         <button
           type="submit"
           disabled={streaming || !draft.trim()}
-          className="h-10 rounded-md bg-accent px-4 text-sm font-medium text-accent-foreground transition hover:opacity-90 disabled:opacity-50"
+          className="h-11 rounded-full bg-laurel px-5 text-sm font-medium text-cream transition hover:bg-laurel-deep disabled:opacity-50"
         >
           Ask
         </button>

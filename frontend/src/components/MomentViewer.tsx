@@ -32,7 +32,7 @@ const INITIAL_STATE: StreamState = {
   error: null,
 };
 
-export function MomentViewer({ image, sportHint, onReset }: MomentViewerProps) {
+export function MomentViewer({ image, onReset }: MomentViewerProps) {
   const [state, setState] = useState<StreamState>(INITIAL_STATE);
   const objectUrlRef = useRef<string | null>(null);
 
@@ -50,7 +50,6 @@ export function MomentViewer({ image, sportHint, onReset }: MomentViewerProps) {
     (async () => {
       const stream = openExplainStream({
         image,
-        sportHint,
         signal: controller.signal,
       });
       for await (const event of stream) {
@@ -59,47 +58,62 @@ export function MomentViewer({ image, sportHint, onReset }: MomentViewerProps) {
     })();
 
     return () => controller.abort();
-  }, [image, sportHint]);
+  }, [image]);
 
   const isThinking = state.status === "loading" || state.status === "vision";
   const isStreaming = state.status === "streaming";
+  const showOverlay = isThinking || isStreaming;
 
   return (
-    <div className="flex flex-col gap-6">
-      <div
-        className="relative overflow-hidden rounded-lg border border-border bg-black"
-        data-status={state.status}
-      >
+    <div className="laurel-fade-up flex flex-col gap-6">
+      <div className="relative overflow-hidden rounded-2xl border border-border bg-foreground">
         {objectUrlRef.current && (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={objectUrlRef.current}
             alt="Captured moment"
             className="h-full w-full object-contain"
           />
         )}
+
+        {/* Animated laurel + gold ring overlay during AI processing. */}
         <div
           aria-hidden
-          className={`pointer-events-none absolute inset-0 rounded-lg transition-opacity ${
-            isThinking || isStreaming ? "opacity-100" : "opacity-0"
+          className={`pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-500 ${
+            showOverlay ? "opacity-100" : "opacity-0"
           }`}
           style={{
-            boxShadow: "0 0 0 3px var(--accent), 0 0 32px var(--accent)",
-            animation: isThinking
-              ? "laurel-pulse 1.6s ease-in-out infinite"
+            animation: showOverlay
+              ? "laurel-pulse-ring 2.4s ease-in-out infinite"
               : undefined,
           }}
         />
+
+        {showOverlay && (
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-0 right-0 top-0 h-1"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--laurel-soft) 50%, var(--gold) 70%, transparent 100%)",
+              backgroundSize: "200% 100%",
+              animation: "laurel-shimmer 2.2s linear infinite",
+            }}
+          />
+        )}
       </div>
 
       {state.sportName && (
-        <p className="text-xs text-muted">
-          <span className="font-mono uppercase tracking-[0.18em]">Identified</span>{" "}
+        <p className="laurel-fade-up text-xs text-muted">
+          <span className="font-mono uppercase tracking-[0.2em] text-laurel">
+            Identified
+          </span>{" "}
           {state.sportName}
           {state.momentSummary ? `. ${state.momentSummary}` : ""}
         </p>
       )}
 
-      <article className="min-h-[8rem] rounded-lg border border-border bg-background p-5 text-sm leading-relaxed text-foreground">
+      <article className="min-h-[8rem] rounded-2xl border border-border bg-background p-5 text-sm leading-relaxed text-foreground">
         {state.explanation || (
           <span className="text-muted">
             {state.status === "loading"
@@ -110,7 +124,7 @@ export function MomentViewer({ image, sportHint, onReset }: MomentViewerProps) {
       </article>
 
       {state.status === "error" && state.error && (
-        <p className="rounded-md border border-border bg-background px-3 py-2 text-xs text-red-600 dark:text-red-400">
+        <p className="rounded-2xl border border-border bg-background px-4 py-3 text-xs text-red-700 dark:text-red-400">
           {state.error}
         </p>
       )}
@@ -141,7 +155,7 @@ export function MomentViewer({ image, sportHint, onReset }: MomentViewerProps) {
           <button
             type="button"
             onClick={() => copyText(state.explanation)}
-            className="rounded-md border border-border bg-background px-4 py-2 text-sm hover:border-accent"
+            className="rounded-full border border-border bg-background px-5 py-2 text-sm text-foreground transition hover:border-laurel"
           >
             Copy explanation
           </button>
@@ -149,27 +163,11 @@ export function MomentViewer({ image, sportHint, onReset }: MomentViewerProps) {
         <button
           type="button"
           onClick={onReset}
-          className="rounded-md border border-border bg-background px-4 py-2 text-sm hover:border-accent"
+          className="rounded-full border border-border bg-background px-5 py-2 text-sm text-foreground transition hover:border-laurel"
         >
           Capture another
         </button>
       </div>
-
-      <style jsx>{`
-        @keyframes laurel-pulse {
-          0%,
-          100% {
-            box-shadow:
-              0 0 0 3px var(--accent),
-              0 0 16px var(--accent);
-          }
-          50% {
-            box-shadow:
-              0 0 0 4px var(--accent),
-              0 0 48px var(--accent);
-          }
-        }
-      `}</style>
     </div>
   );
 }

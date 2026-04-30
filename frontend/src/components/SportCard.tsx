@@ -3,15 +3,17 @@ import Link from "next/link";
 import type { SportSummary } from "@/lib/api";
 
 export function SportCard({ sport }: { sport: SportSummary }) {
+  const tone = sport.type === "Olympic" ? "text-laurel" : "text-gold-deep";
+
   return (
     <Link
       href={`/sports/${sport.slug}`}
-      className="group flex flex-col rounded-lg border border-border bg-background p-5 transition hover:border-accent hover:shadow-sm"
+      className="group flex flex-col rounded-2xl border border-border bg-background p-5 transition hover:-translate-y-0.5 hover:border-laurel hover:shadow-[0_8px_24px_-12px_rgba(31,77,58,0.3)]"
     >
-      <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
+      <span className={`font-mono text-[10px] uppercase tracking-[0.24em] ${tone}`}>
         {sport.type}
       </span>
-      <span className="mt-2 text-lg font-medium text-foreground group-hover:text-accent">
+      <span className="mt-3 font-serif text-2xl font-medium text-foreground transition-colors group-hover:text-laurel">
         {sport.name}
       </span>
       {sport.parity_pair && (

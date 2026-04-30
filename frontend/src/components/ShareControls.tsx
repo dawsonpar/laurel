@@ -54,7 +54,7 @@ export function ShareControls({
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // fallback handled by anchor selection
+      // fallback: user can select the input
     }
   };
 
@@ -82,35 +82,37 @@ export function ShareControls({
           type="button"
           onClick={generate}
           disabled={saving}
-          className="rounded-md border border-border bg-background px-4 py-2 text-sm hover:border-accent disabled:opacity-50"
+          className="self-start rounded-full border border-border bg-background px-5 py-2 text-sm text-foreground transition hover:border-gold hover:text-gold-deep disabled:opacity-50"
         >
           {saving ? "Saving..." : "Generate share link"}
         </button>
-        {error && <p className="text-xs text-red-600 dark:text-red-400">{error}</p>}
+        {error && (
+          <p className="text-xs text-red-700 dark:text-red-400">{error}</p>
+        )}
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-2 rounded-md border border-border bg-background p-3">
+    <div className="laurel-fade-up flex flex-col gap-2 rounded-2xl border border-border bg-background p-3">
       <div className="flex items-center gap-2">
         <input
           readOnly
           value={shareUrl}
-          className="flex-1 rounded border border-border bg-background px-2 py-1 text-xs text-foreground"
+          className="flex-1 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-foreground"
           onFocus={(e) => e.currentTarget.select()}
         />
         <button
           type="button"
           onClick={copy}
-          className="rounded border border-border bg-background px-3 py-1 text-xs hover:border-accent"
+          className="rounded-full border border-border bg-background px-3 py-1.5 text-xs hover:border-laurel"
         >
           {copied ? "Copied" : "Copy"}
         </button>
         <button
           type="button"
           onClick={nativeShare}
-          className="rounded border border-border bg-background px-3 py-1 text-xs hover:border-accent"
+          className="rounded-full bg-laurel px-3 py-1.5 text-xs text-cream hover:bg-laurel-deep"
         >
           Share
         </button>

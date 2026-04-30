@@ -32,16 +32,16 @@ function AccordionItem({
 }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="overflow-hidden rounded-lg border border-border">
+    <div className="overflow-hidden rounded-2xl border border-border">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center justify-between bg-background px-5 py-4 text-left transition hover:bg-border/30"
+        className="flex w-full items-center justify-between bg-background px-5 py-4 text-left transition hover:bg-cream"
         aria-expanded={open}
       >
         <span className="text-sm font-medium text-foreground">{title}</span>
         <span
-          className="text-muted transition-transform"
+          className="text-laurel transition-transform"
           style={{ transform: open ? "rotate(45deg)" : "rotate(0deg)" }}
           aria-hidden
         >
@@ -49,7 +49,7 @@ function AccordionItem({
         </span>
       </button>
       {open && (
-        <div className="border-t border-border bg-background px-5 py-4">
+        <div className="laurel-fade-up border-t border-border bg-background px-5 py-4">
           <div className="prose-sm whitespace-pre-wrap text-sm leading-relaxed text-foreground">
             {content}
           </div>

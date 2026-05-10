@@ -66,12 +66,15 @@ body {
 
 /* Reusable AI-state animations. */
 
+/* background-position decreases over time so the visible gradient pattern
+   appears to flow left-to-right (natural reading direction). Used by the
+   landing CTA, the capture button, and the moment-viewer processing bar. */
 @keyframes laurel-shimmer {
   0% {
-    background-position: 0% 50%;
+    background-position: 200% 50%;
   }
   100% {
-    background-position: 200% 50%;
+    background-position: 0% 50%;
   }
 }
 

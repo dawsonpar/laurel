@@ -14,16 +14,28 @@ export async function generateMetadata({ params }: PageProps) {
   const { id } = await params;
   const moment = await fetchMoment(id);
   if (!moment) return { title: "Moment not found. Laurel" };
-  const description = moment.explanation.slice(0, 160);
+  const description = truncateAtWord(
+    moment.moment_summary || moment.explanation,
+    160,
+  );
   return {
     title: `${moment.sport_name ?? "A Laurel moment"} on Laurel`,
     description,
     openGraph: {
-      title: `${moment.sport_name ?? "Laurel moment"}`,
+      title: moment.sport_name ?? "Laurel moment",
       description,
       type: "article",
     },
   };
+}
+
+function truncateAtWord(text: string, cap: number): string {
+  const trimmed = text.trim();
+  if (trimmed.length <= cap) return trimmed;
+  const slice = trimmed.slice(0, cap);
+  const lastSpace = slice.lastIndexOf(" ");
+  const safe = lastSpace > cap * 0.6 ? slice.slice(0, lastSpace) : slice;
+  return safe.replace(/[.,;:!?\s]+$/, "") + "...";
 }
 
 export default async function MomentPage({ params }: PageProps) {

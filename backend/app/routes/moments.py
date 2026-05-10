@@ -17,8 +17,8 @@ import time
 from collections.abc import AsyncIterator
 from typing import Annotated
 
-from fastapi import APIRouter, Form, HTTPException, UploadFile
-from fastapi.responses import FileResponse, StreamingResponse
+from fastapi import APIRouter, Form, HTTPException, Response, UploadFile
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 from app.ai.gemini_client import get_client
@@ -27,7 +27,6 @@ from app.ai.streaming import pace_tokens
 from app.kb import registry as kb_registry
 from app.storage.moments_store import (
     MomentRecord,
-    get_local_store,
     get_store,
 )
 
@@ -106,21 +105,18 @@ async def get_moment(moment_id: str):
 
 @router.get("/moments/{moment_id}/frame")
 async def get_frame(moment_id: str):
-    """Serve the frame bytes.
+    """Serve the frame bytes from whichever store is active.
 
-    In dev (LocalMomentsStore active) the file is served directly.
-    In production (CloudMomentsStore active) this is unused: the signed URL
-    on the moment record points at Cloud Storage directly.
+    Local store reads from disk. Cloud store streams from Cloud Storage
+    through this backend (avoids the signed-URL signing limitation when
+    Cloud Run runs under Workload Identity credentials).
     """
-    # Touch get_store() so the local store fixture is initialized in tests.
-    get_store()
-    local = get_local_store()
-    if local is None:
-        raise HTTPException(status_code=404, detail="Frame not served from this backend.")
-    path = local.get_frame_path(moment_id)
-    if not path:
+    store = get_store()
+    result = await store.get_frame_bytes(moment_id)
+    if not result:
         raise HTTPException(status_code=404, detail=f"Frame not found: {moment_id}")
-    return FileResponse(path)
+    bytes_, mime_type = result
+    return Response(content=bytes_, media_type=mime_type)
 
 
 @router.post("/moments/{moment_id}/follow-up")

@@ -39,6 +39,12 @@ class MomentsStore(Protocol):
 
     async def get_frame_url(self, moment_id: str) -> str | None: ...
 
+    async def get_frame_bytes(
+        self, moment_id: str
+    ) -> tuple[bytes, str] | None:
+        """Return (frame_bytes, mime_type) for the moment, or None if missing."""
+        ...
+
 
 class LocalMomentsStore:
     """Filesystem-backed store. Frames as files, metadata as JSON next to them."""
@@ -73,6 +79,20 @@ class LocalMomentsStore:
             if candidate.exists():
                 return candidate
         return None
+
+    async def get_frame_bytes(
+        self, moment_id: str
+    ) -> tuple[bytes, str] | None:
+        path = self.get_frame_path(moment_id)
+        if not path:
+            return None
+        ext_to_mime = {
+            ".jpg": "image/jpeg",
+            ".jpeg": "image/jpeg",
+            ".png": "image/png",
+            ".webp": "image/webp",
+        }
+        return path.read_bytes(), ext_to_mime.get(path.suffix, "image/jpeg")
 
 
 def _ext_for_mime(mime_type: str) -> str:

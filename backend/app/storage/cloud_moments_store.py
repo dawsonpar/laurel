@@ -1,16 +1,20 @@
 """Cloud Storage + Firestore moments store.
 
-Activated when MOMENTS_BUCKET is configured (and by extension the deployer
-has set up GCP credentials). Frame bytes go to Cloud Storage with a
-30-day lifecycle TTL configured at bucket level. Metadata goes to a
-Firestore collection. The signed URL returned to the client is short-lived
-(1 hour by default) and re-issued on each get_frame_url call.
+Activated when MOMENTS_BUCKET is configured. Frame bytes go to Cloud Storage
+with a 30-day lifecycle TTL configured at bucket level. Metadata goes to a
+Firestore collection.
+
+Frames are served via our Cloud Run /api/moments/{id}/frame endpoint
+(streaming the bytes through the backend) instead of via Cloud Storage
+signed URLs. The Workload Identity credentials Cloud Run uses lack a
+private key for signing; routing through our backend avoids the
+google.auth.compute_engine signing limitation entirely. The cost of an
+extra hop is negligible for our volume.
 """
 
 from __future__ import annotations
 
 from dataclasses import asdict
-from datetime import timedelta
 
 from app.storage.moments_store import MomentRecord
 
@@ -47,7 +51,7 @@ class CloudMomentsStore:
         doc = self._firestore().collection(self._collection).document(record.id)
         doc.set({**asdict(record), "frame_blob": blob_name, "mime_type": mime_type})
 
-        return self._signed_url(blob_name)
+        return f"/api/moments/{record.id}/frame"
 
     async def get(self, moment_id: str) -> MomentRecord | None:
         snapshot = self._firestore().collection(self._collection).document(moment_id).get()
@@ -62,20 +66,22 @@ class CloudMomentsStore:
         snapshot = self._firestore().collection(self._collection).document(moment_id).get()
         if not snapshot.exists:
             return None
+        return f"/api/moments/{moment_id}/frame"
+
+    async def get_frame_bytes(
+        self, moment_id: str
+    ) -> tuple[bytes, str] | None:
+        snapshot = self._firestore().collection(self._collection).document(moment_id).get()
+        if not snapshot.exists:
+            return None
         data = snapshot.to_dict() or {}
         blob_name = data.get("frame_blob")
+        mime_type = data.get("mime_type", "image/jpeg")
         if not blob_name:
             return None
-        return self._signed_url(blob_name)
-
-    def _signed_url(self, blob_name: str) -> str:
         bucket = self._bucket()
         blob = bucket.blob(blob_name)
-        return blob.generate_signed_url(
-            expiration=timedelta(hours=1),
-            method="GET",
-            version="v4",
-        )
+        return blob.download_as_bytes(), mime_type
 
 
 def _ext_for_mime(mime_type: str) -> str:

@@ -19,6 +19,12 @@ interface Turn {
   content: string;
 }
 
+const SUGGESTED_FOLLOWUPS = [
+  "What's the rule?",
+  "Why does this matter?",
+  "Is this rare?",
+];
+
 export function Conversation({
   momentId,
   sportSlug,
@@ -33,26 +39,24 @@ export function Conversation({
   const [streaming, setStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const submit = async (e?: React.FormEvent) => {
-    e?.preventDefault();
-    const question = draft.trim();
-    if (!question || streaming) return;
+  const ask = async (question: string) => {
+    const cleaned = question.trim();
+    if (!cleaned || streaming) return;
 
-    const newTurns: Turn[] = [
+    const historySnapshot: Turn[] = turns;
+    setTurns([
       ...turns,
-      { role: "user", content: question },
+      { role: "user", content: cleaned },
       { role: "assistant", content: "" },
-    ];
-    setTurns(newTurns);
+    ]);
     setDraft("");
     setStreaming(true);
     setError(null);
 
-    const history: Turn[] = turns;
     const stream = openFollowUpStream({
       momentId,
-      question,
-      history,
+      question: cleaned,
+      history: historySnapshot,
       sportSlug,
       sportName,
       momentSummary,
@@ -76,6 +80,14 @@ export function Conversation({
     setStreaming(false);
   };
 
+  const submit = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    return ask(draft);
+  };
+
+  // Hide the starter chips once the conversation has any user turn.
+  const showSuggestions = !turns.some((t) => t.role === "user");
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-3">
@@ -97,6 +109,27 @@ export function Conversation({
         <p className="rounded-2xl border border-border bg-background px-4 py-3 text-xs text-red-700 dark:text-red-400">
           {error}
         </p>
+      )}
+
+      {showSuggestions && (
+        <div className="laurel-fade-up flex flex-col gap-2">
+          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-muted">
+            Try asking
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {SUGGESTED_FOLLOWUPS.map((suggestion) => (
+              <button
+                key={suggestion}
+                type="button"
+                onClick={() => ask(suggestion)}
+                disabled={streaming}
+                className="rounded-full border border-border bg-background px-3 py-1.5 text-xs text-foreground transition hover:border-laurel hover:text-laurel disabled:opacity-50"
+              >
+                {suggestion}
+              </button>
+            ))}
+          </div>
+        </div>
       )}
 
       <form onSubmit={submit} className="flex items-center gap-2">

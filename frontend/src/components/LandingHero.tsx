@@ -43,7 +43,7 @@ export function LandingHero() {
 
       <div className="flex w-full max-w-md flex-col items-center text-center">
         <p
-          className={`font-mono text-[10px] uppercase tracking-[0.32em] text-laurel ${
+          className={`font-mono text-[10px] uppercase tracking-[0.32em] text-foreground ${
             animate ? "intro-step" : ""
           }`}
           style={animate ? { opacity: 0, animationDelay: "1500ms" } : undefined}
@@ -82,22 +82,25 @@ export function LandingHero() {
 
         <Link
           href="/capture"
-          className={`group mt-10 inline-flex items-center gap-3 rounded-full px-8 py-4 text-base font-medium text-cream shadow-[0_8px_32px_-8px_rgba(31,77,58,0.5)] transition hover:shadow-[0_12px_40px_-8px_rgba(201,169,97,0.6)] ${
-            animate ? "intro-step" : ""
-          }`}
+          className="group mt-10 inline-flex items-center gap-3 rounded-full px-8 py-4 text-base font-medium text-cream shadow-[0_8px_32px_-8px_rgba(31,77,58,0.5)] transition hover:shadow-[0_12px_40px_-8px_rgba(201,169,97,0.6)]"
           style={{
-            // 5-stop palindrome so the shimmer loop has no visible seam at
-            // the wrap point. The animation pans this 200%-wide gradient
-            // back and forth instead of producing a hard line in the middle.
+            // Palindrome gradient so the shimmer loop has no visible seam.
+            // The animation pans this 200%-wide gradient back and forth
+            // instead of producing a hard line where the wrap used to land.
             background:
               "linear-gradient(110deg, var(--laurel-deep) 0%, var(--laurel) 25%, var(--gold) 50%, var(--laurel) 75%, var(--laurel-deep) 100%)",
             backgroundSize: "200% 100%",
+            // During the intro: fade-up first (delayed), then start the
+            // shimmer right after. After the intro: shimmer only.
             ...(animate
-              ? { opacity: 0, animationDelay: "1900ms" }
+              ? {
+                  opacity: 0,
+                  animation:
+                    "intro-step-in 500ms cubic-bezier(0.2, 0.8, 0.2, 1) 1900ms forwards, laurel-shimmer 8s linear 2400ms infinite",
+                }
               : { animation: "laurel-shimmer 8s linear infinite" }),
           }}
         >
-          <CaptureGlyph />
           <span>Capture a moment</span>
           <ArrowRight />
         </Link>
@@ -228,25 +231,6 @@ function IntroLaurel({
           />
         );
       })}
-    </svg>
-  );
-}
-
-function CaptureGlyph() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2" />
-      <circle cx="12" cy="12" r="4" />
     </svg>
   );
 }

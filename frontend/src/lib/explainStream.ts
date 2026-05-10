@@ -2,6 +2,13 @@
 
 import { BACKEND_URL } from "./api";
 
+export interface SupportedSport {
+  slug: string;
+  name: string;
+  type: "Olympic" | "Paralympic";
+  parity_pair: string | null;
+}
+
 export type ExplainEvent =
   | {
       type: "vision";
@@ -17,6 +24,12 @@ export type ExplainEvent =
     }
   | { type: "token"; text: string }
   | { type: "done"; moment_id: string }
+  | {
+      type: "unsupported";
+      moment_id: string;
+      message: string;
+      supported_sports: SupportedSport[];
+    }
   | { type: "error"; message: string };
 
 interface ExplainStreamOptions {

@@ -9,6 +9,13 @@ Gemini Vision read motion across the sampled instant. The pipeline is:
 3. KB retrieval: pull top-k chunks for the identified sport.
 4. Gemini synthesis: stream the explanation grounded in KB context.
 
+Failure handling:
+- Vision returns no sport (image isn't recognizable as one of the curated
+  six): emit an `unsupported` event with a Laurel-personified message and
+  the supported sports list, then `done`. No synthesis call.
+- Vision call throws: emit an `error` event so the UI can show a friendly
+  retry instead of hanging.
+
 The sport_hint form field lets the client override identification when the
 user manually disambiguates.
 """
@@ -27,11 +34,17 @@ from app.ai.gemini_client import VisionFrame, get_client
 from app.ai.prompts import build_explain_prompt
 from app.ai.streaming import pace_tokens
 from app.kb import registry as kb_registry
+from app.routes.sports import SPORT_METADATA
 
 router = APIRouter(tags=["explain"])
 
 ALLOWED_MIME_TYPES = {"image/jpeg", "image/png", "image/webp"}
 MAX_FRAMES = 5
+
+UNSUPPORTED_MESSAGE = (
+    "I do not recognize this one yet. For the hackathon I am focused on "
+    "six sports. Try one of these and I can break it down for you."
+)
 
 
 @router.post("/explain")
@@ -58,9 +71,21 @@ async def explain_moment(
         client = get_client()
 
         # Step 1: vision identification across the frame sequence.
-        vision = await client.identify_sport(frames)
+        try:
+            vision = await client.identify_sport(frames)
+        except Exception as exc:  # noqa: BLE001 - top-level guard for any client failure
+            yield _sse_event(
+                "error",
+                {
+                    "moment_id": moment_id,
+                    "message": _friendly_vision_error(exc),
+                },
+            )
+            return
+
         sport_slug = sport_hint or vision.sport_slug
         sport_name = vision.sport_name
+
         yield _sse_event(
             "vision",
             {
@@ -71,6 +96,19 @@ async def explain_moment(
                 "confidence": vision.confidence,
             },
         )
+
+        # Failure mode: identified sport is not in our curated set.
+        if not sport_slug or sport_slug not in SPORT_METADATA:
+            yield _sse_event(
+                "unsupported",
+                {
+                    "moment_id": moment_id,
+                    "message": UNSUPPORTED_MESSAGE,
+                    "supported_sports": _supported_sports(),
+                },
+            )
+            yield _sse_event("done", {"moment_id": moment_id})
+            return
 
         # Step 2: KB retrieval.
         try:
@@ -102,12 +140,36 @@ async def explain_moment(
             sport_name=sport_name,
             retrieved=retrieved,
         )
-        async for token in pace_tokens(client.stream_explanation(prompt)):
-            yield _sse_event("token", {"text": token})
+        try:
+            async for token in pace_tokens(client.stream_explanation(prompt)):
+                yield _sse_event("token", {"text": token})
+        except Exception as exc:  # noqa: BLE001
+            yield _sse_event(
+                "error",
+                {
+                    "moment_id": moment_id,
+                    "message": _friendly_vision_error(exc),
+                },
+            )
+            return
 
         yield _sse_event("done", {"moment_id": moment_id})
 
     return StreamingResponse(event_stream(), media_type="text/event-stream")
+
+
+def _supported_sports() -> list[dict[str, str | None]]:
+    return [{"slug": slug, **meta} for slug, meta in SPORT_METADATA.items()]
+
+
+def _friendly_vision_error(exc: Exception) -> str:
+    text = str(exc).lower()
+    if "invalid" in text and "image" in text:
+        return (
+            "That frame did not come through clearly. Try capturing again "
+            "with the moment centered on the screen."
+        )
+    return "Something went wrong reading that moment. Try capturing again in a moment."
 
 
 def _sse_event(event: str, data: dict) -> bytes:

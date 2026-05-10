@@ -2,10 +2,17 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 
+import Link from "next/link";
+
 import { Conversation } from "@/components/Conversation";
+import { LaurelMark } from "@/components/LaurelMark";
 import { ShareControls } from "@/components/ShareControls";
 import type { CapturedMoment } from "@/lib/capturedMoment";
-import { openExplainStream, type ExplainEvent } from "@/lib/explainStream";
+import {
+  openExplainStream,
+  type ExplainEvent,
+  type SupportedSport,
+} from "@/lib/explainStream";
 
 interface MomentViewerProps {
   moment: CapturedMoment;
@@ -13,13 +20,15 @@ interface MomentViewerProps {
 }
 
 interface StreamState {
-  status: "loading" | "vision" | "streaming" | "done" | "error";
+  status: "loading" | "vision" | "streaming" | "done" | "unsupported" | "error";
   momentId: string | null;
   sportSlug: string | null;
   sportName: string | null;
   momentSummary: string | null;
   explanation: string;
   error: string | null;
+  unsupportedMessage: string | null;
+  supportedSports: SupportedSport[];
 }
 
 const INITIAL_STATE: StreamState = {
@@ -30,6 +39,8 @@ const INITIAL_STATE: StreamState = {
   momentSummary: null,
   explanation: "",
   error: null,
+  unsupportedMessage: null,
+  supportedSports: [],
 };
 
 export function MomentViewer({ moment, onReset }: MomentViewerProps) {
@@ -131,7 +142,7 @@ export function MomentViewer({ moment, onReset }: MomentViewerProps) {
         )}
       </div>
 
-      {state.sportName && (
+      {state.sportName && state.status !== "unsupported" && (
         <p className="laurel-fade-up text-xs text-muted">
           <span className="font-mono uppercase tracking-[0.2em] text-laurel">
             Identified
@@ -141,20 +152,39 @@ export function MomentViewer({ moment, onReset }: MomentViewerProps) {
         </p>
       )}
 
-      <article className="min-h-[8rem] rounded-2xl border border-border bg-background p-5 text-sm leading-relaxed text-foreground">
-        {state.explanation || (
-          <span className="text-muted">
-            {state.status === "loading"
-              ? "Sending the clip to Laurel..."
-              : "Reading the moment..."}
-          </span>
-        )}
-      </article>
+      {state.status === "unsupported" && state.unsupportedMessage && (
+        <UnsupportedSportCard
+          message={state.unsupportedMessage}
+          supportedSports={state.supportedSports}
+        />
+      )}
+
+      {state.status !== "unsupported" && state.status !== "error" && (
+        <article className="min-h-[8rem] rounded-2xl border border-border bg-background p-5 text-sm leading-relaxed text-foreground">
+          {state.explanation || (
+            <span className="text-muted">
+              {state.status === "loading"
+                ? "Sending the clip to Laurel..."
+                : "Reading the moment..."}
+            </span>
+          )}
+        </article>
+      )}
 
       {state.status === "error" && state.error && (
-        <p className="rounded-2xl border border-border bg-background px-4 py-3 text-xs text-red-700 dark:text-red-400">
-          {state.error}
-        </p>
+        <article className="laurel-fade-up flex flex-col gap-3 rounded-2xl border border-border bg-background p-5">
+          <div className="flex items-center gap-3">
+            <span className="text-laurel">
+              <LaurelMark size={28} />
+            </span>
+            <p className="font-serif text-xl font-medium text-foreground">
+              I dropped the ball on that one.
+            </p>
+          </div>
+          <p className="text-sm leading-relaxed text-foreground">
+            {state.error}
+          </p>
+        </article>
       )}
 
       {state.status === "done" && state.momentId && (
@@ -223,7 +253,20 @@ function applyEvent(
       }));
       break;
     case "done":
-      set((s) => ({ ...s, status: "done", momentId: event.moment_id }));
+      set((s) =>
+        s.status === "unsupported"
+          ? s
+          : { ...s, status: "done", momentId: event.moment_id },
+      );
+      break;
+    case "unsupported":
+      set((s) => ({
+        ...s,
+        status: "unsupported",
+        momentId: event.moment_id,
+        unsupportedMessage: event.message,
+        supportedSports: event.supported_sports,
+      }));
       break;
     case "error":
       set((s) => ({ ...s, status: "error", error: event.message }));
@@ -237,4 +280,43 @@ async function copyText(text: string) {
   } catch {
     // Silent failure: clipboard requires HTTPS or user gesture in some browsers.
   }
+}
+
+function UnsupportedSportCard({
+  message,
+  supportedSports,
+}: {
+  message: string;
+  supportedSports: SupportedSport[];
+}) {
+  return (
+    <article
+      data-testid="unsupported-sport-card"
+      className="laurel-fade-up flex flex-col gap-4 rounded-2xl border border-border bg-background p-5"
+    >
+      <div className="flex items-center gap-3">
+        <span className="text-laurel">
+          <LaurelMark size={28} />
+        </span>
+        <p className="font-serif text-xl font-medium text-foreground">
+          Hmm, that one is not in my playbook yet.
+        </p>
+      </div>
+      <p className="text-sm leading-relaxed text-foreground">{message}</p>
+      <div className="flex flex-wrap gap-2 pt-1">
+        {supportedSports.map((sport) => (
+          <Link
+            key={sport.slug}
+            href={`/sports/${sport.slug}`}
+            className="rounded-full border border-border bg-background px-3 py-1 text-xs text-foreground transition hover:border-laurel hover:text-laurel"
+          >
+            {sport.name}
+            <span className="ml-1 text-[10px] uppercase tracking-[0.18em] text-muted">
+              {sport.type === "Paralympic" ? "Para" : "Oly"}
+            </span>
+          </Link>
+        ))}
+      </div>
+    </article>
+  );
 }

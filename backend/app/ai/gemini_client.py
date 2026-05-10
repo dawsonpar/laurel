@@ -44,10 +44,26 @@ class GeminiClient(Protocol):
 
 
 class StubGeminiClient:
-    """Deterministic stub for local dev. No API calls, predictable output."""
+    """Deterministic stub for local dev. No API calls, predictable output.
+
+    Set STUB_VISION_FORCE=unsupported to exercise the failure-mode UX
+    without needing to upload a non-Olympic image.
+    """
 
     async def identify_sport(self, frames: list[VisionFrame]) -> VisionResult:
+        import os
+
         await asyncio.sleep(0.1)
+        force = os.getenv("STUB_VISION_FORCE", "").lower()
+        if force == "unsupported":
+            return VisionResult(
+                sport_slug=None,
+                sport_name=None,
+                moment_summary=f"Stub identification across {len(frames)} frame(s): unrecognized.",
+                confidence=0.1,
+            )
+        if force == "error":
+            raise RuntimeError("Stub-induced vision error.")
         return VisionResult(
             sport_slug="curling",
             sport_name="Curling",

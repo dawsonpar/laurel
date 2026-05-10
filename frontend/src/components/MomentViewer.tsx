@@ -289,10 +289,13 @@ function UnsupportedSportCard({
   message: string;
   supportedSports: SupportedSport[];
 }) {
+  const olympic = supportedSports.filter((s) => s.type === "Olympic");
+  const paralympic = supportedSports.filter((s) => s.type === "Paralympic");
+
   return (
     <article
       data-testid="unsupported-sport-card"
-      className="laurel-fade-up flex flex-col gap-4 rounded-2xl border border-border bg-background p-5"
+      className="laurel-fade-up flex flex-col gap-5 rounded-2xl border border-border bg-background p-5"
     >
       <div className="flex items-center gap-3">
         <span className="text-laurel">
@@ -303,20 +306,36 @@ function UnsupportedSportCard({
         </p>
       </div>
       <p className="text-sm leading-relaxed text-foreground">{message}</p>
-      <div className="flex flex-wrap gap-2 pt-1">
-        {supportedSports.map((sport) => (
+      <SportGroup label="Olympic" sports={olympic} />
+      <SportGroup label="Paralympic" sports={paralympic} />
+    </article>
+  );
+}
+
+function SportGroup({
+  label,
+  sports,
+}: {
+  label: string;
+  sports: SupportedSport[];
+}) {
+  if (sports.length === 0) return null;
+  return (
+    <div className="flex flex-col gap-2">
+      <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-laurel">
+        {label}
+      </p>
+      <div className="flex flex-wrap gap-2">
+        {sports.map((sport) => (
           <Link
             key={sport.slug}
             href={`/sports/${sport.slug}`}
             className="rounded-full border border-border bg-background px-3 py-1 text-xs text-foreground transition hover:border-laurel hover:text-laurel"
           >
             {sport.name}
-            <span className="ml-1 text-[10px] uppercase tracking-[0.18em] text-muted">
-              {sport.type === "Paralympic" ? "Para" : "Oly"}
-            </span>
           </Link>
         ))}
       </div>
-    </article>
+    </div>
   );
 }

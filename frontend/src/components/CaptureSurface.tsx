@@ -27,8 +27,27 @@ export function CaptureSurface({
   const [starting, setStarting] = useState(false);
   const [recording, setRecording] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Browser support flags. Initialized true to avoid SSR/hydration mismatch;
+  // probed in a useEffect after mount.
+  const [screenShareSupported, setScreenShareSupported] = useState(true);
+  const [cameraSupported, setCameraSupported] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const md = typeof navigator !== "undefined" ? navigator.mediaDevices : undefined;
+    const screenOk = typeof md?.getDisplayMedia === "function";
+    const cameraOk = typeof md?.getUserMedia === "function";
+    setScreenShareSupported(screenOk);
+    setCameraSupported(cameraOk);
+    // If user landed on a mode their browser cannot do, drop them onto the
+    // one that works. iOS Safari is the canonical case: no getDisplayMedia.
+    setMode((current) => {
+      if (current === "screen" && !screenOk && cameraOk) return "camera";
+      if (current === "camera" && !cameraOk && screenOk) return "screen";
+      return current;
+    });
+  }, []);
 
   useEffect(() => {
     if (videoRef.current && stream) {
@@ -56,6 +75,14 @@ export function CaptureSurface({
 
   const startStream = async () => {
     setError(null);
+    if (mode === "screen" && !screenShareSupported) {
+      setError(unsupportedScreenMessage);
+      return;
+    }
+    if (mode === "camera" && !cameraSupported) {
+      setError(unsupportedCameraMessage);
+      return;
+    }
     setStarting(true);
     try {
       const next =
@@ -70,9 +97,7 @@ export function CaptureSurface({
             });
       setStream(next);
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Could not start capture.";
-      setError(`${message}. Try the upload option below.`);
+      setError(friendlyCaptureError(err, mode));
     } finally {
       setStarting(false);
     }
@@ -114,28 +139,38 @@ export function CaptureSurface({
   const isLive = !!stream;
   const isBusy = isLive && recording;
 
+  // Only show the mode toggle when both modes are usable. On iOS Safari /
+  // most mobile browsers getDisplayMedia is missing, so the chip becomes a
+  // dead end. Hiding it leaves Camera + Upload, which is the right path for
+  // those users.
+  const showModeToggle = screenShareSupported && cameraSupported;
+  const modeIsSupported =
+    mode === "screen" ? screenShareSupported : cameraSupported;
+
   return (
     <div className="flex flex-col gap-4">
-      <div className="inline-flex w-full items-center gap-1 self-start rounded-full border border-border bg-background p-1 sm:w-auto">
-        <ModeChip
-          active={mode === "screen"}
-          onClick={() => {
-            stopStream();
-            setMode("screen");
-          }}
-          label="Share screen"
-          icon={<ScreenIcon />}
-        />
-        <ModeChip
-          active={mode === "camera"}
-          onClick={() => {
-            stopStream();
-            setMode("camera");
-          }}
-          label="Use camera"
-          icon={<CameraIcon />}
-        />
-      </div>
+      {showModeToggle && (
+        <div className="inline-flex w-full items-center gap-1 self-start rounded-full border border-border bg-background p-1 sm:w-auto">
+          <ModeChip
+            active={mode === "screen"}
+            onClick={() => {
+              stopStream();
+              setMode("screen");
+            }}
+            label="Share screen"
+            icon={<ScreenIcon />}
+          />
+          <ModeChip
+            active={mode === "camera"}
+            onClick={() => {
+              stopStream();
+              setMode("camera");
+            }}
+            label="Use camera"
+            icon={<CameraIcon />}
+          />
+        </div>
+      )}
 
       <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl border border-border bg-foreground sm:aspect-video">
         <video
@@ -157,14 +192,20 @@ export function CaptureSurface({
               <LaurelMark size={48} />
             </div>
             <p className="font-serif text-2xl text-cream">
-              {mode === "screen" ? "Share your screen" : "Use your camera"}
+              {!modeIsSupported
+                ? "Upload a screenshot"
+                : mode === "screen"
+                  ? "Share your screen"
+                  : "Use your camera"}
             </p>
             <p className="max-w-xs text-sm leading-relaxed text-cream/70">
               {starting
                 ? "Starting capture..."
-                : mode === "screen"
-                  ? "Pick the window or display showing the Games."
-                  : "Point at the TV and capture the moment."}
+                : !modeIsSupported
+                  ? "Live capture isn't supported on this device. Drop in a screenshot from your photo library and Laurel will read it the same way."
+                  : mode === "screen"
+                    ? "Pick the window or display showing the Games."
+                    : "Point at the TV and capture the moment."}
             </p>
           </div>
         )}
@@ -177,7 +218,7 @@ export function CaptureSurface({
       )}
 
       <div className="flex flex-col gap-3 sm:flex-row">
-        {!isLive ? (
+        {!isLive && modeIsSupported ? (
           <button
             type="button"
             onClick={startStream}
@@ -190,7 +231,8 @@ export function CaptureSurface({
                 ? "Start sharing"
                 : "Start camera"}
           </button>
-        ) : (
+        ) : null}
+        {isLive && (
           <button
             type="button"
             onClick={captureClip}
@@ -254,6 +296,37 @@ function RecordingOverlay() {
 interface ClipResult {
   blob: Blob;
   mime: string;
+}
+
+const unsupportedScreenMessage =
+  "Screen sharing isn't supported on this device. Use your camera or upload a screenshot instead.";
+
+const unsupportedCameraMessage =
+  "Camera capture isn't available here. Upload a screenshot instead.";
+
+function friendlyCaptureError(err: unknown, mode: CaptureMode): string {
+  if (!(err instanceof Error)) return "Could not start capture. Try uploading a screenshot.";
+  // DOMExceptions surface as Errors with a useful `name`.
+  switch (err.name) {
+    case "NotAllowedError":
+      return mode === "screen"
+        ? "Screen sharing was blocked. Allow access or upload a screenshot."
+        : "Camera access was blocked. Allow it in your browser settings or upload a screenshot.";
+    case "NotFoundError":
+    case "OverconstrainedError":
+      return mode === "screen"
+        ? "No display was selected. Try again or upload a screenshot."
+        : "No camera was found on this device. Upload a screenshot instead.";
+    case "NotReadableError":
+      return "Another app is using the camera. Close it and try again, or upload a screenshot.";
+    case "AbortError":
+      return "Capture was cancelled. Try again or upload a screenshot.";
+    case "TypeError":
+      // Thrown when the API itself is missing (iOS Safari for getDisplayMedia).
+      return mode === "screen" ? unsupportedScreenMessage : unsupportedCameraMessage;
+    default:
+      return "Could not start capture. Try uploading a screenshot.";
+  }
 }
 
 function createRecorder(stream: MediaStream): MediaRecorder | null {

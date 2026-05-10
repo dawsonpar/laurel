@@ -36,7 +36,10 @@
   --color-accent-foreground: var(--cream);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-serif: var(--font-cormorant);
+  /* Bricolage Grotesque is a sans, but we keep the `font-serif` token name
+     so existing display headlines pick it up without renaming every class. */
+  --font-serif: var(--font-bricolage);
+  --font-display: var(--font-bricolage);
 }
 
 @media (prefers-color-scheme: dark) {

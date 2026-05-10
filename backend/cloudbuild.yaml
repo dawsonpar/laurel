@@ -3,7 +3,7 @@ steps:
     args:
       - build
       - -t
-      - $_REGION-docker.pkg.dev/$PROJECT_ID/laurel/laurel-backend:$SHORT_SHA
+      - $_REGION-docker.pkg.dev/$PROJECT_ID/laurel/laurel-backend:$BUILD_ID
       - -t
       - $_REGION-docker.pkg.dev/$PROJECT_ID/laurel/laurel-backend:latest
       - .
@@ -18,16 +18,17 @@ steps:
       - run
       - deploy
       - laurel-backend
-      - --image=$_REGION-docker.pkg.dev/$PROJECT_ID/laurel/laurel-backend:$SHORT_SHA
+      - --image=$_REGION-docker.pkg.dev/$PROJECT_ID/laurel/laurel-backend:$BUILD_ID
       - --region=$_REGION
       - --platform=managed
       - --allow-unauthenticated
+      - --service-account=laurel-backend@$PROJECT_ID.iam.gserviceaccount.com
       - --set-env-vars=ENVIRONMENT=production,GOOGLE_CLOUD_PROJECT=$PROJECT_ID,GOOGLE_CLOUD_LOCATION=$_REGION,MOMENTS_BUCKET=$_MOMENTS_BUCKET,CORS_ALLOWED_ORIGINS=$_CORS_ALLOWED_ORIGINS
 
 options:
-  logging: CLOUD_LOGGING_ONLY
+  logging: GCS_ONLY
 
 substitutions:
   _REGION: us-central1
-  _MOMENTS_BUCKET: laurel-moments
+  _MOMENTS_BUCKET: laurel-495915-moments
   _CORS_ALLOWED_ORIGINS: https://laurel.vercel.app

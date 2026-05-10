@@ -45,6 +45,7 @@ export function MomentViewer({ image, onReset }: MomentViewerProps) {
 
   useEffect(() => {
     const controller = new AbortController();
+    let cancelled = false;
     setState(INITIAL_STATE);
 
     (async () => {
@@ -53,11 +54,15 @@ export function MomentViewer({ image, onReset }: MomentViewerProps) {
         signal: controller.signal,
       });
       for await (const event of stream) {
+        if (cancelled) break;
         applyEvent(event, setState);
       }
     })();
 
-    return () => controller.abort();
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
   }, [image]);
 
   const isThinking = state.status === "loading" || state.status === "vision";

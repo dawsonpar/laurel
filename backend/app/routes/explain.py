@@ -24,6 +24,7 @@ from nanoid import generate as nanoid  # type: ignore[import-untyped]
 
 from app.ai.gemini_client import get_client
 from app.ai.prompts import build_explain_prompt
+from app.ai.streaming import pace_tokens
 from app.kb import registry as kb_registry
 
 router = APIRouter(tags=["explain"])
@@ -91,7 +92,7 @@ async def explain_moment(
             sport_name=sport_name,
             retrieved=retrieved,
         )
-        async for token in client.stream_explanation(prompt):
+        async for token in pace_tokens(client.stream_explanation(prompt)):
             yield _sse_event("token", {"text": token})
 
         yield _sse_event("done", {"moment_id": moment_id})

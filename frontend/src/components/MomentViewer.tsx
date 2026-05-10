@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { Conversation } from "@/components/Conversation";
 import { ShareControls } from "@/components/ShareControls";
+import type { CapturedMoment } from "@/lib/capturedMoment";
 import { openExplainStream, type ExplainEvent } from "@/lib/explainStream";
 
 interface MomentViewerProps {
-  image: Blob;
-  sportHint?: string;
+  moment: CapturedMoment;
   onReset: () => void;
 }
 
@@ -32,16 +32,28 @@ const INITIAL_STATE: StreamState = {
   error: null,
 };
 
-export function MomentViewer({ image, onReset }: MomentViewerProps) {
+export function MomentViewer({ moment, onReset }: MomentViewerProps) {
   const [state, setState] = useState<StreamState>(INITIAL_STATE);
-  const objectUrlRef = useRef<string | null>(null);
+  const [mediaUrl, setMediaUrl] = useState<string | null>(null);
+
+  // Frame used for the share preview (and OG image). Pick the middle frame
+  // when we have multiples; otherwise the only one.
+  const shareFrame = useMemo(() => {
+    if (moment.frames.length === 0) return null;
+    const mid = Math.floor(moment.frames.length / 2);
+    return moment.frames[mid] ?? moment.frames[0];
+  }, [moment.frames]);
 
   useEffect(() => {
-    objectUrlRef.current = URL.createObjectURL(image);
-    return () => {
-      if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
-    };
-  }, [image]);
+    const source = moment.clip ?? shareFrame;
+    if (!source) {
+      setMediaUrl(null);
+      return;
+    }
+    const url = URL.createObjectURL(source);
+    setMediaUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [moment.clip, shareFrame]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -50,7 +62,7 @@ export function MomentViewer({ image, onReset }: MomentViewerProps) {
 
     (async () => {
       const stream = openExplainStream({
-        image,
+        images: moment.frames,
         signal: controller.signal,
       });
       for await (const event of stream) {
@@ -63,25 +75,36 @@ export function MomentViewer({ image, onReset }: MomentViewerProps) {
       cancelled = true;
       controller.abort();
     };
-  }, [image]);
+  }, [moment.frames]);
 
   const isThinking = state.status === "loading" || state.status === "vision";
   const isStreaming = state.status === "streaming";
   const showOverlay = isThinking || isStreaming;
+  const hasClip = !!moment.clip;
 
   return (
     <div className="laurel-fade-up flex flex-col gap-6">
       <div className="relative overflow-hidden rounded-2xl border border-border bg-foreground">
-        {objectUrlRef.current && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={objectUrlRef.current}
-            alt="Captured moment"
-            className="h-full w-full object-contain"
-          />
-        )}
+        {mediaUrl &&
+          (hasClip ? (
+            <video
+              key={mediaUrl}
+              src={mediaUrl}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="h-full w-full object-contain"
+            />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={mediaUrl}
+              alt="Captured moment"
+              className="h-full w-full object-contain"
+            />
+          ))}
 
-        {/* Animated laurel + gold ring overlay during AI processing. */}
         <div
           aria-hidden
           className={`pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-500 ${
@@ -122,7 +145,7 @@ export function MomentViewer({ image, onReset }: MomentViewerProps) {
         {state.explanation || (
           <span className="text-muted">
             {state.status === "loading"
-              ? "Sending the frame to Laurel..."
+              ? "Sending the clip to Laurel..."
               : "Reading the moment..."}
           </span>
         )}
@@ -144,10 +167,10 @@ export function MomentViewer({ image, onReset }: MomentViewerProps) {
         />
       )}
 
-      {state.status === "done" && state.momentId && (
+      {state.status === "done" && state.momentId && shareFrame && (
         <ShareControls
           momentId={state.momentId}
-          image={image}
+          image={shareFrame}
           explanation={state.explanation}
           sportSlug={state.sportSlug}
           sportName={state.sportName}

@@ -26,7 +26,7 @@ def test_explain_returns_sse_stream():
     fake_image = io.BytesIO(b"\xff\xd8\xff\xe0\x00\x10JFIF" + b"\x00" * 100)
     response = client.post(
         "/api/explain",
-        files={"image": ("frame.jpg", fake_image, "image/jpeg")},
+        files=[("images", ("frame.jpg", fake_image, "image/jpeg"))],
     )
     assert response.status_code == 200
     assert response.headers["content-type"].startswith("text/event-stream")
@@ -42,7 +42,7 @@ def test_explain_with_sport_hint_overrides_identification():
     fake_image = io.BytesIO(b"\xff\xd8\xff\xe0" + b"\x00" * 100)
     response = client.post(
         "/api/explain",
-        files={"image": ("frame.jpg", fake_image, "image/jpeg")},
+        files=[("images", ("frame.jpg", fake_image, "image/jpeg"))],
         data={"sport_hint": "athletics"},
     )
     assert response.status_code == 200

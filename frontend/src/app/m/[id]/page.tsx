@@ -13,10 +13,10 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps) {
   const { id } = await params;
   const moment = await fetchMoment(id);
-  if (!moment) return { title: "Moment not found — Laurel" };
+  if (!moment) return { title: "Moment not found. Laurel" };
   const description = moment.explanation.slice(0, 160);
   return {
-    title: `${moment.sport_name ?? "A Laurel moment"} — Laurel`,
+    title: `${moment.sport_name ?? "A Laurel moment"} on Laurel`,
     description,
     openGraph: {
       title: `${moment.sport_name ?? "Laurel moment"}`,

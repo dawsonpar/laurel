@@ -2,7 +2,6 @@ import { ImageResponse } from "next/og";
 
 import { fetchMoment } from "@/lib/api";
 
-export const runtime = "nodejs";
 export const alt = "Laurel moment";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -11,13 +10,14 @@ interface OgProps {
   params: Promise<{ id: string }>;
 }
 
-export default async function OgImage({ params }: OgProps) {
+export default async function Image({ params }: OgProps) {
   const { id } = await params;
   const moment = await fetchMoment(id).catch(() => null);
 
-  const sport = moment?.sport_name ?? "Olympic / Paralympic moment";
-  const headline = moment?.moment_summary || "What just happened?";
-  const explanation = (moment?.explanation ?? "").slice(0, 220);
+  const sport = moment?.sport_name ?? "Olympic / Paralympic";
+  const headline =
+    moment?.moment_summary?.slice(0, 120) || "What just happened?";
+  const explanation = (moment?.explanation ?? "").slice(0, 200);
 
   return new ImageResponse(
     (
@@ -28,34 +28,43 @@ export default async function OgImage({ params }: OgProps) {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          padding: "60px",
+          padding: 60,
           background:
-            "radial-gradient(circle at 80% 0%, #e8d49c 0%, #faf8f4 35%, #faf8f4 100%)",
+            "linear-gradient(135deg, #e8d49c 0%, #faf8f4 35%, #faf8f4 100%)",
           color: "#1a1a1a",
-          fontFamily: "system-ui, sans-serif",
         }}
       >
-        <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           <div
             style={{
-              fontSize: "20px",
-              letterSpacing: "0.32em",
+              display: "flex",
+              fontSize: 20,
+              letterSpacing: 6,
               textTransform: "uppercase",
               color: "#1f4d3a",
+              marginBottom: 24,
             }}
           >
             Laurel · {sport}
           </div>
-          <div style={{ fontSize: "60px", fontWeight: 600, lineHeight: 1.1 }}>
+          <div
+            style={{
+              display: "flex",
+              fontSize: 60,
+              fontWeight: 600,
+              lineHeight: 1.1,
+            }}
+          >
             {headline}
           </div>
           {explanation && (
             <div
               style={{
-                fontSize: "26px",
+                display: "flex",
+                fontSize: 26,
                 lineHeight: 1.4,
                 color: "#3a3a3a",
-                marginTop: "16px",
+                marginTop: 24,
               }}
             >
               {explanation}
@@ -71,9 +80,10 @@ export default async function OgImage({ params }: OgProps) {
         >
           <div
             style={{
-              fontSize: "18px",
+              display: "flex",
+              fontSize: 18,
               color: "#a88a4a",
-              letterSpacing: "0.28em",
+              letterSpacing: 5,
               textTransform: "uppercase",
             }}
           >
@@ -81,9 +91,10 @@ export default async function OgImage({ params }: OgProps) {
           </div>
           <div
             style={{
-              fontSize: "18px",
+              display: "flex",
+              fontSize: 18,
               color: "#1f4d3a",
-              letterSpacing: "0.28em",
+              letterSpacing: 5,
               textTransform: "uppercase",
             }}
           >

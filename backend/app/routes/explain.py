@@ -1,10 +1,11 @@
 """Capture + explain pipeline.
 
-POST /api/explain accepts a multipart image and streams an explanation back
-via Server-Sent Events. The pipeline is:
+POST /api/explain accepts one or more multipart frames (chronological order)
+and streams an explanation back via Server-Sent Events. Multiple frames let
+Gemini Vision read motion across the sampled instant. The pipeline is:
 
-1. Read image bytes.
-2. Gemini Vision: identify sport + visual summary.
+1. Read all frames in order.
+2. Gemini Vision: identify sport + visual summary across the sequence.
 3. KB retrieval: pull top-k chunks for the identified sport.
 4. Gemini synthesis: stream the explanation grounded in KB context.
 
@@ -18,11 +19,11 @@ import json
 from collections.abc import AsyncIterator
 from typing import Annotated
 
-from fastapi import APIRouter, Form, UploadFile
+from fastapi import APIRouter, Form, HTTPException, UploadFile
 from fastapi.responses import StreamingResponse
 from nanoid import generate as nanoid  # type: ignore[import-untyped]
 
-from app.ai.gemini_client import get_client
+from app.ai.gemini_client import VisionFrame, get_client
 from app.ai.prompts import build_explain_prompt
 from app.ai.streaming import pace_tokens
 from app.kb import registry as kb_registry
@@ -30,25 +31,34 @@ from app.kb import registry as kb_registry
 router = APIRouter(tags=["explain"])
 
 ALLOWED_MIME_TYPES = {"image/jpeg", "image/png", "image/webp"}
+MAX_FRAMES = 5
 
 
 @router.post("/explain")
 async def explain_moment(
-    image: UploadFile,
+    images: list[UploadFile],
     sport_hint: Annotated[str | None, Form()] = None,
 ):
-    image_bytes = await image.read()
-    mime_type = image.content_type or "image/jpeg"
-    if mime_type not in ALLOWED_MIME_TYPES:
-        mime_type = "image/jpeg"
+    if not images:
+        raise HTTPException(status_code=400, detail="At least one frame is required.")
+    if len(images) > MAX_FRAMES:
+        raise HTTPException(status_code=400, detail=f"At most {MAX_FRAMES} frames allowed.")
+
+    frames: list[VisionFrame] = []
+    for image in images:
+        data = await image.read()
+        mime = image.content_type or "image/jpeg"
+        if mime not in ALLOWED_MIME_TYPES:
+            mime = "image/jpeg"
+        frames.append(VisionFrame(data=data, mime_type=mime))
 
     moment_id = _new_moment_id()
 
     async def event_stream() -> AsyncIterator[bytes]:
         client = get_client()
 
-        # Step 1: vision identification.
-        vision = await client.identify_sport(image_bytes, mime_type)
+        # Step 1: vision identification across the frame sequence.
+        vision = await client.identify_sport(frames)
         sport_slug = sport_hint or vision.sport_slug
         sport_name = vision.sport_name
         yield _sse_event(

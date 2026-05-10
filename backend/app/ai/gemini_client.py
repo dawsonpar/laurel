@@ -20,6 +20,14 @@ from app.config import get_settings
 
 
 @dataclass(frozen=True)
+class VisionFrame:
+    """One sampled frame from the captured clip."""
+
+    data: bytes
+    mime_type: str
+
+
+@dataclass(frozen=True)
 class VisionResult:
     """Structured output from the sport-identification step."""
 
@@ -30,7 +38,7 @@ class VisionResult:
 
 
 class GeminiClient(Protocol):
-    async def identify_sport(self, image_bytes: bytes, mime_type: str) -> VisionResult: ...
+    async def identify_sport(self, frames: list[VisionFrame]) -> VisionResult: ...
 
     def stream_explanation(self, prompt: str) -> AsyncIterator[str]: ...
 
@@ -38,12 +46,14 @@ class GeminiClient(Protocol):
 class StubGeminiClient:
     """Deterministic stub for local dev. No API calls, predictable output."""
 
-    async def identify_sport(self, image_bytes: bytes, mime_type: str) -> VisionResult:
+    async def identify_sport(self, frames: list[VisionFrame]) -> VisionResult:
         await asyncio.sleep(0.1)
         return VisionResult(
             sport_slug="curling",
             sport_name="Curling",
-            moment_summary="Stub identification: curling stones in the house.",
+            moment_summary=(
+                f"Stub identification across {len(frames)} frame(s): curling stones in the house."
+            ),
             confidence=0.5,
         )
 
@@ -51,7 +61,7 @@ class StubGeminiClient:
         message = (
             "This is a stub response while the backend runs without GCP "
             "credentials. Connect a Google Cloud project to enable real "
-            "Gemini synthesis. The captured frame and knowledge-base "
+            "Gemini synthesis. The captured frames and knowledge-base "
             "context would be summarized here."
         )
         for word in message.split():
@@ -79,29 +89,41 @@ class VertexAIGeminiClient:
             )
         return self._client
 
-    async def identify_sport(self, image_bytes: bytes, mime_type: str) -> VisionResult:
+    async def identify_sport(self, frames: list[VisionFrame]) -> VisionResult:
         from google.genai import types
 
         client = self._ensure_client()
 
+        n = len(frames)
+        sequence_note = (
+            f"You are looking at {n} frames sampled at 1 Hz from a 3-second clip, "
+            "in chronological order. Use the motion across frames to inform your read."
+            if n > 1
+            else "You are looking at a single captured frame."
+        )
+
         prompt = (
             "You are an Olympic and Paralympic sports identifier. "
-            "Look at this image and return a JSON object with these fields: "
+            f"{sequence_note} "
+            "Return a JSON object with these fields: "
             "sport_slug (one of: figure-skating, curling, athletics, "
             "wheelchair-curling, para-alpine-skiing, para-athletics, or null "
             "if it does not match any of these), "
             "sport_name (the human-readable name or null), "
-            "moment_summary (a one-sentence factual description of what is "
-            "visible), confidence (0 to 1). Respond with ONLY the JSON object."
+            "moment_summary (a one-sentence factual description of what happens "
+            "across the sequence), confidence (0 to 1). "
+            "Respond with ONLY the JSON object."
         )
+
+        contents: list = [
+            types.Part.from_bytes(data=f.data, mime_type=f.mime_type) for f in frames
+        ]
+        contents.append(prompt)
 
         response = await asyncio.to_thread(
             client.models.generate_content,
             model=self._model,
-            contents=[
-                types.Part.from_bytes(data=image_bytes, mime_type=mime_type),
-                prompt,
-            ],
+            contents=contents,
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
                 temperature=0.1,

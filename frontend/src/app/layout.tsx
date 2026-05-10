@@ -19,8 +19,15 @@ const cormorant = Cormorant_Garamond({
   weight: ["400", "500", "600", "700"],
 });
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : "http://localhost:3000");
+
 export const metadata: Metadata = {
-  title: "Laurel — Understand the Games",
+  metadataBase: new URL(siteUrl),
+  title: "Laurel. Understand the Games.",
   description:
     "Capture any Olympic or Paralympic moment from your TV. Laurel explains what just happened, the rules behind it, and why it matters.",
 };

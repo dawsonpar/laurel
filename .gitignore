@@ -62,3 +62,4 @@ tmp/
 
 # Claude Code coordination (per CLAUDE.md)
 .claude-coord/
+.vercel

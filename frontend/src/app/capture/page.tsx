@@ -6,9 +6,10 @@ import { useState } from "react";
 import { CaptureSurface } from "@/components/CaptureSurface";
 import { LaurelMark } from "@/components/LaurelMark";
 import { MomentViewer } from "@/components/MomentViewer";
+import type { CapturedMoment } from "@/lib/capturedMoment";
 
 export default function CapturePage() {
-  const [captured, setCaptured] = useState<Blob | null>(null);
+  const [captured, setCaptured] = useState<CapturedMoment | null>(null);
 
   return (
     <main className="flex flex-1 flex-col items-center px-6 py-10">
@@ -47,7 +48,7 @@ export default function CapturePage() {
         )}
 
         {captured ? (
-          <MomentViewer image={captured} onReset={() => setCaptured(null)} />
+          <MomentViewer moment={captured} onReset={() => setCaptured(null)} />
         ) : (
           <CaptureSurface onCapture={setCaptured} />
         )}

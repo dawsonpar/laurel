@@ -20,7 +20,8 @@ export type ExplainEvent =
   | { type: "error"; message: string };
 
 interface ExplainStreamOptions {
-  image: Blob;
+  /** One or more frames in chronological order. The backend treats them as a sequence. */
+  images: Blob[];
   sportHint?: string;
   signal?: AbortSignal;
 }
@@ -33,8 +34,14 @@ interface ExplainStreamOptions {
 export async function* openExplainStream(
   opts: ExplainStreamOptions,
 ): AsyncGenerator<ExplainEvent, void, void> {
+  if (opts.images.length === 0) {
+    yield { type: "error", message: "No frames captured." };
+    return;
+  }
   const form = new FormData();
-  form.append("image", opts.image, "frame.jpg");
+  opts.images.forEach((blob, i) => {
+    form.append("images", blob, `frame-${i}.jpg`);
+  });
   if (opts.sportHint) form.append("sport_hint", opts.sportHint);
 
   let response: Response;

@@ -28,7 +28,7 @@ const siteUrl =
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Laurel. Understand the Games.",
+  title: "Laurel",
   description:
     "Capture any Olympic or Paralympic moment from your TV. Laurel explains what just happened, the rules behind it, and why it matters.",
 };

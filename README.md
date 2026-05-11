@@ -8,9 +8,9 @@ Built for the [Team USA x Google Cloud Hackathon](https://vibecodeforgoldwithgoo
 
 ## Walkthrough
 
-https://github.com/dawsonpar/laurel/raw/main/frontend/public/demo/laurel-walkthrough.mp4
+![Laurel walkthrough](https://github.com/dawsonpar/laurel/raw/main/frontend/public/demo/laurel-walkthrough.gif)
 
-<sub>Video not playing inline? <a href="https://github.com/dawsonpar/laurel/raw/main/frontend/public/demo/laurel-walkthrough.mp4">Download the walkthrough</a>.</sub>
+<sub>Prefer the original recording? <a href="https://github.com/dawsonpar/laurel/raw/main/frontend/public/demo/laurel-walkthrough.mp4">Download the MP4</a>.</sub>
 
 ## What it does
 

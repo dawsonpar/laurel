@@ -6,6 +6,12 @@ Olympic and Paralympic moment explainer powered by Gemini.
 
 Built for the [Team USA x Google Cloud Hackathon](https://vibecodeforgoldwithgoogle.devpost.com/) under the Choose Your Own Challenge track.
 
+## Walkthrough
+
+https://github.com/dawsonpar/laurel/raw/main/frontend/public/demo/laurel-walkthrough.mp4
+
+<sub>Video not playing inline? <a href="https://github.com/dawsonpar/laurel/raw/main/frontend/public/demo/laurel-walkthrough.mp4">Download the walkthrough</a>.</sub>
+
 ## What it does
 
 Capture a frame from your TV (camera or upload), and Laurel explains what just happened, the rule behind it, and why it matters. Conversational follow-ups via text or voice. Sharable links with rich previews. Olympic and Paralympic content treated as equals (3 sports each in the MVP).

@@ -112,6 +112,15 @@ export function LandingHero() {
           style={animate ? { opacity: 0, animationDelay: "2100ms" } : undefined}
         >
           <Link
+            href="/demo"
+            className="text-laurel transition hover:text-laurel-deep"
+          >
+            See a demo
+          </Link>
+          <span className="text-muted/50" aria-hidden>
+            •
+          </span>
+          <Link
             href="/sports"
             className="text-muted transition hover:text-laurel"
           >
@@ -135,7 +144,7 @@ export function LandingHero() {
         }`}
         style={animate ? { opacity: 0, animationDelay: "2300ms" } : undefined}
       >
-        GCP × Team USA Hackathon 2026
+        Team USA × Google Cloud Hackathon 2026
       </footer>
     </main>
   );

@@ -29,7 +29,7 @@ export default function AboutPage() {
           </h1>
           <p className="mt-3 text-base leading-relaxed text-muted">
             An Olympic and Paralympic moment explainer powered by Gemini. Built
-            for the GCP × Team USA Hackathon 2026.
+            for the Team USA × Google Cloud Hackathon 2026.
           </p>
         </div>
 

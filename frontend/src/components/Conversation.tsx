@@ -12,6 +12,9 @@ interface ConversationProps {
   sportName: string | null;
   momentSummary: string;
   initialAnswer: string;
+  /** Override the default suggested chips. Used by /demo routes to
+      pre-stage scene-specific questions. */
+  suggestedFollowups?: readonly string[];
 }
 
 interface Turn {
@@ -19,7 +22,7 @@ interface Turn {
   content: string;
 }
 
-const SUGGESTED_FOLLOWUPS = [
+const DEFAULT_SUGGESTED_FOLLOWUPS = [
   "What's the rule?",
   "Why does this matter?",
   "Is this rare?",
@@ -31,7 +34,9 @@ export function Conversation({
   sportName,
   momentSummary,
   initialAnswer,
+  suggestedFollowups,
 }: ConversationProps) {
+  const SUGGESTED_FOLLOWUPS = suggestedFollowups ?? DEFAULT_SUGGESTED_FOLLOWUPS;
   const [turns, setTurns] = useState<Turn[]>([
     { role: "assistant", content: initialAnswer },
   ]);
@@ -85,8 +90,11 @@ export function Conversation({
     return ask(draft);
   };
 
-  // Hide the starter chips once the conversation has any user turn.
-  const showSuggestions = !turns.some((t) => t.role === "user");
+  // Hide the starter chips once the conversation has any user turn, or
+  // if a caller explicitly cleared the suggestions.
+  const showSuggestions =
+    SUGGESTED_FOLLOWUPS.length > 0 &&
+    !turns.some((t) => t.role === "user");
 
   return (
     <div className="flex flex-col gap-4">
@@ -132,14 +140,19 @@ export function Conversation({
         </div>
       )}
 
-      <form onSubmit={submit} className="flex items-center gap-2">
+      <form
+        onSubmit={submit}
+        className="flex items-center gap-1 rounded-full border border-border bg-background pl-5 pr-1 py-1 transition focus-within:border-laurel"
+      >
         <input
           type="text"
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
-          placeholder="Ask a follow-up. eg, was that a record?"
+          placeholder="Ask a follow-up..."
           disabled={streaming}
-          className="h-11 flex-1 rounded-full border border-border bg-background px-5 text-sm text-foreground placeholder:text-muted focus:border-laurel focus:outline-none"
+          enterKeyHint="send"
+          /* text-base (16px) prevents iOS Safari from auto-zooming on focus. */
+          className="h-10 flex-1 min-w-0 bg-transparent text-base text-foreground placeholder:text-muted focus:outline-none"
         />
         <VoiceInput
           onTranscript={(text) => setDraft(text)}
@@ -148,9 +161,23 @@ export function Conversation({
         <button
           type="submit"
           disabled={streaming || !draft.trim()}
-          className="h-11 rounded-full bg-laurel px-5 text-sm font-medium text-cream transition hover:bg-laurel-deep disabled:opacity-50"
+          aria-label="Send question"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-laurel text-cream transition hover:bg-laurel-deep disabled:opacity-40"
         >
-          Ask
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="18"
+            height="18"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
         </button>
       </form>
     </div>

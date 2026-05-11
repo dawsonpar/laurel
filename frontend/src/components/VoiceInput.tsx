@@ -59,10 +59,10 @@ export function VoiceInput({ onTranscript, disabled }: VoiceInputProps) {
       onClick={start}
       disabled={disabled}
       title={listening ? "Listening, tap to stop" : "Speak your question"}
-      className={`flex h-11 w-11 items-center justify-center rounded-full border transition disabled:opacity-50 ${
+      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition disabled:opacity-50 ${
         listening
-          ? "border-gold bg-gold text-cream"
-          : "border-border bg-background text-foreground hover:border-laurel"
+          ? "bg-gold text-cream"
+          : "text-muted hover:bg-cream hover:text-laurel"
       }`}
       aria-pressed={listening}
       aria-label={listening ? "Stop voice input" : "Start voice input"}

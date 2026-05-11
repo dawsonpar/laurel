@@ -44,6 +44,16 @@ export default function CapturePage() {
               Laurel watches what you watch. Share your screen on a laptop,
               point your phone at the TV, or upload a screenshot.
             </p>
+            <p className="mt-3 text-xs text-muted">
+              No live broadcast handy?{" "}
+              <Link
+                href="/demo"
+                className="font-medium text-laurel hover:underline"
+              >
+                Try a pre-loaded demo
+              </Link>
+              .
+            </p>
           </div>
         )}
 

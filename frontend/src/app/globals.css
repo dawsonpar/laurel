@@ -90,17 +90,23 @@ body {
   }
 }
 
+/* Inset rings so the glow renders INSIDE the clipped media surface.
+   Stacking a 4px solid laurel/gold against a thinner contrast layer keeps
+   the frame readable on both light and dark backgrounds, and the deep
+   soft blur supplies the breathing inner glow. */
 @keyframes laurel-pulse-ring {
   0%,
   100% {
     box-shadow:
-      0 0 0 2px var(--laurel),
-      0 0 24px 0 var(--gold);
+      inset 0 0 0 4px var(--gold),
+      inset 0 0 0 5px var(--laurel),
+      inset 0 0 32px 2px var(--gold);
   }
   50% {
     box-shadow:
-      0 0 0 3px var(--gold),
-      0 0 56px 4px var(--laurel);
+      inset 0 0 0 4px var(--laurel),
+      inset 0 0 0 5px var(--gold),
+      inset 0 0 64px 6px var(--laurel);
   }
 }
 

@@ -17,6 +17,10 @@ import {
 interface MomentViewerProps {
   moment: CapturedMoment;
   onReset: () => void;
+  /** Optional scene-specific suggested follow-up chips (used by /demo). */
+  suggestedFollowups?: readonly string[];
+  /** Optional CTA label override (e.g. "Try another scene"). */
+  resetLabel?: string;
 }
 
 interface StreamState {
@@ -43,7 +47,12 @@ const INITIAL_STATE: StreamState = {
   supportedSports: [],
 };
 
-export function MomentViewer({ moment, onReset }: MomentViewerProps) {
+export function MomentViewer({
+  moment,
+  onReset,
+  suggestedFollowups,
+  resetLabel,
+}: MomentViewerProps) {
   const [state, setState] = useState<StreamState>(INITIAL_STATE);
   const [mediaUrl, setMediaUrl] = useState<string | null>(null);
 
@@ -122,6 +131,12 @@ export function MomentViewer({ moment, onReset }: MomentViewerProps) {
             showOverlay ? "opacity-100" : "opacity-0"
           }`}
           style={{
+            // Fallback ring drawn before the first animation frame paints,
+            // and a hint to the compositor so the chunky inset glow stays
+            // smooth during streaming.
+            boxShadow:
+              "inset 0 0 0 4px var(--gold), inset 0 0 0 5px var(--laurel), inset 0 0 32px 2px var(--gold)",
+            willChange: showOverlay ? "box-shadow" : undefined,
             animation: showOverlay
               ? "laurel-pulse-ring 2.4s ease-in-out infinite"
               : undefined,
@@ -194,38 +209,91 @@ export function MomentViewer({ moment, onReset }: MomentViewerProps) {
           sportName={state.sportName}
           momentSummary={state.momentSummary ?? ""}
           initialAnswer={state.explanation}
+          suggestedFollowups={suggestedFollowups}
         />
       )}
 
-      {state.status === "done" && state.momentId && shareFrame && (
-        <ShareControls
-          momentId={state.momentId}
-          image={shareFrame}
-          explanation={state.explanation}
-          sportSlug={state.sportSlug}
-          sportName={state.sportName}
-          momentSummary={state.momentSummary ?? ""}
-        />
-      )}
+      {state.status === "done" && (
+        <div className="mt-2 flex flex-col gap-4 border-t border-border pt-5">
+          {/* Utility row: secondary actions (share + copy). Grouped, muted,
+              equal weight. Vertical on mobile, inline on desktop. */}
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+            {state.momentId && shareFrame && (
+              <ShareControls
+                momentId={state.momentId}
+                image={shareFrame}
+                explanation={state.explanation}
+                sportSlug={state.sportSlug}
+                sportName={state.sportName}
+                momentSummary={state.momentSummary ?? ""}
+              />
+            )}
+            <button
+              type="button"
+              onClick={() => copyText(state.explanation)}
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-xs font-medium text-muted transition hover:border-laurel hover:text-laurel"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              </svg>
+              Copy explanation
+            </button>
+          </div>
 
-      <div className="flex flex-col gap-2 sm:flex-row sm:justify-between">
-        {state.status === "done" && (
+          {/* Primary CTA. Mirrors the landing-page Capture button so the
+              "what next" action is visually unmistakable. */}
           <button
             type="button"
-            onClick={() => copyText(state.explanation)}
+            onClick={onReset}
+            className="group inline-flex items-center justify-center gap-3 rounded-full px-8 py-4 text-base font-medium text-cream shadow-[0_8px_32px_-8px_rgba(31,77,58,0.5)] transition hover:shadow-[0_12px_40px_-8px_rgba(201,169,97,0.6)]"
+            style={{
+              background:
+                "linear-gradient(110deg, var(--laurel-deep) 0%, var(--laurel) 25%, var(--gold) 50%, var(--laurel) 75%, var(--laurel-deep) 100%)",
+              backgroundSize: "200% 100%",
+              animation: "laurel-shimmer 8s linear infinite",
+            }}
+          >
+            <span>{resetLabel ?? "Capture another moment"}</span>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden
+              className="transition-transform group-hover:translate-x-1"
+            >
+              <path d="M5 12h14M13 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      )}
+
+      {state.status !== "done" && (
+        <div className="flex flex-col gap-2 sm:flex-row sm:justify-between">
+          <button
+            type="button"
+            onClick={onReset}
             className="rounded-full border border-border bg-background px-5 py-2 text-sm text-foreground transition hover:border-laurel"
           >
-            Copy explanation
+            Capture another
           </button>
-        )}
-        <button
-          type="button"
-          onClick={onReset}
-          className="rounded-full border border-border bg-background px-5 py-2 text-sm text-foreground transition hover:border-laurel"
-        >
-          Capture another
-        </button>
-      </div>
+        </div>
+      )}
     </div>
   );
 }

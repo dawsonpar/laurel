@@ -13,14 +13,14 @@ The four positions are lead (stones one and two), second (three and four), third
 
 Sweeping reduces friction in front of a moving stone, helping it travel farther and curl less. Any number of teammates may sweep their own stone in front of the tee line. Past the tee line, only one player from each team may sweep, and the opponent only behind the tee line. The Free Guard Zone rule applies to the first five stones of an end: a stone resting between hogline and tee line outside the house cannot be removed by the opponent. If it is, the stone is replaced and the offender removed. There is no FGZ in mixed doubles.
 
-Common violations that can negate a great-looking shot include hogline violations (thrower fails to release before the near hogline), "burned stone" infractions (a player or broom contacts a moving stone), and "double-touch" violations during delivery, in which the thrower contacts the running stone after release. Per World Curling rule R.5(d), the stone must be delivered using the handle; touching the granite during forward motion is not allowed. The non-offending team typically chooses to leave the stones, replace them, or remove the offender.
+Common violations that can negate a great-looking shot include hogline violations (thrower fails to release before the near hogline), "burned stone" infractions (a player or broom contacts a moving stone), and "double-touch" violations during delivery, in which the thrower contacts the running stone after release. Under the governing rule for delivery (commonly cited as R.5(d) in the international rulebook), the stone must be delivered using the handle; touching the granite during forward motion is not allowed. The non-offending team typically chooses to leave the stones, replace them, or remove the offender.
 
 ## Scoring
 Only one team scores per end. That team gets one point for every stone closer to the button than the closest opposing stone. The theoretical max of eight (an "eight-ender") is extremely rare at elite level. If no stones are in the house, or counts cancel out, the end is a "blank end," no points scored, and the team with the hammer keeps it.
 
 Teams without the hammer try to score one (a "steal") or force the opponent to take only one. With the hammer, a common tactic is to blank an end rather than score one, since scoring one hands the hammer over. Tiebreakers are typically resolved by a tiebreaker game or by Draw Shot Challenge cumulative scores, depending on the format.
 
-Milano Cortina 2026 surfaced clarifications around the touched-moving-stone or "double-touch" rule. Sweden's Oskar Eriksson raised the issue against Canada's Marc Kennedy, with video appearing to show Kennedy nudging the stone after release. World Curling issued a public clarification on R.5(d), and over the following days stones from Canada's Rachel Homan and Great Britain's Bobby Lammie were also pulled. World Curling later reverted to monitoring violations only on team request.
+The Olympic Winter Games Milano Cortina 2026 surfaced clarifications around the touched-moving-stone or "double-touch" rule. The international governing body issued a public clarification of the delivery rule mid-tournament, and over the following days several stones across multiple teams were pulled under the same rule. The governing body later reverted to monitoring violations only on team request.
 
 ## Glossary
 - **End:** Unit of play; both teams throw all their stones, like an inning.
@@ -55,11 +55,11 @@ Milano Cortina 2026 surfaced clarifications around the touched-moving-stone or "
 - **Steal:** Scoring in an end without the hammer.
 
 ## Notable Records & Historical Context
-Canada is the most decorated nation in Olympic curling history and led the all-time medal table entering Milano Cortina 2026. On 21 February 2026, Brad Jacobs, Marc Kennedy, Brett Gallant, and Ben Hebert beat Bruce Mouat's Great Britain 9-6 for men's gold, scoring three in the ninth end. Jacobs is reported to be the first male skip to win two Olympic golds, his earlier title at Sochi 2014.
+Canada is the most decorated nation in Olympic curling history and led the all-time medal table entering the Olympic Winter Games Milano Cortina 2026. Canada won the men's gold at Milano Cortina 2026, defeating Great Britain 9-6 in the final on 21 February 2026 with a three-point ninth end.
 
-Switzerland defeated Sweden 6-5 in the women's gold medal game on 22 February 2026. In mixed doubles, Sweden's sibling pair Isabella and Rasmus Wranå beat the USA 6-5 on 10 February 2026, Sweden's first Olympic gold in the discipline after Beijing 2022 bronze.
+Switzerland defeated Sweden 6-5 in the women's gold medal game on 22 February 2026. In mixed doubles, Sweden defeated the United States 6-5 on 10 February 2026, claiming the country's first Olympic gold in the discipline (a bronze had been won at the Olympic Winter Games Beijing 2022).
 
-Earlier landmarks: Great Britain's women won gold at Salt Lake City 2002 (Rhona Martin) and Beijing 2022 (Eve Muirhead). Sweden's Anette Norberg took back-to-back women's golds in 2006 and 2010. Canada's Jennifer Jones went undefeated through Sochi 2014.
+Earlier landmarks: Great Britain's women's team won gold at the Olympic Winter Games Salt Lake City 2002 and again at Beijing 2022. Sweden's women won back-to-back golds at Torino 2006 and Vancouver 2010. Canada's women went undefeated through the Olympic Winter Games Sochi 2014.
 
 ## What to Look For
 The skip is easiest to spot: standing in the far house holding a broom upright as a target. When the skip throws, the third takes that role. Sweepers travel alongside the moving stone; you will hear the skip yell "hurry hard" or "whoa," meaning sweep harder or stop.

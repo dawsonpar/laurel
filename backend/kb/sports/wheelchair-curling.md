@@ -23,9 +23,9 @@ Scoring is identical to Olympic curling, so the Curling KB covers the fundamenta
 Two differences matter for viewers. Games are shorter at eight ends instead of ten, which compresses the strategic arc and makes a single big end more decisive. And because there is no sweeping, a thrower cannot rescue a stone that comes up light or drifts off line. Strategy leans toward simpler shots and conservative draws because the margin for error on weight is zero once the stone leaves the stick.
 
 ## Classifications
-World Curling sets the eligibility standard. Athletes must have a lower-limb impairment that prevents a sliding delivery. Qualifying conditions include spinal cord injury, cerebral palsy, multiple sclerosis, spina bifida, polyneuropathy, and amputation or congenital limb deficiency affecting the lower limbs. There is only one sport class, and athletes pass a classification panel review to confirm eligibility.
+The international governing body for curling sets the eligibility standard. Athletes must have a lower-limb impairment that prevents a sliding delivery. Qualifying conditions include spinal cord injury, cerebral palsy, multiple sclerosis, spina bifida, polyneuropathy, and amputation or congenital limb deficiency affecting the lower limbs. There is only one sport class, and athletes pass a classification panel review to confirm eligibility.
 
-One rule worth flagging: every team must include both male and female players, and a woman must be on the ice for every shot. The mixed-gender requirement was firmly in place by PyeongChang 2018. The newest change is mixed doubles at Milano Cortina 2026, played by two athletes per side.
+One rule worth flagging: every team must include both male and female players, and a woman must be on the ice for every shot. The mixed-gender requirement was firmly in place by the Paralympic Winter Games PyeongChang 2018. The newest change is mixed doubles at the Paralympic Winter Games Milano Cortina 2026, played by two athletes per side.
 
 ## Glossary
 - **End**: A segment in which both teams throw all their stones. A wheelchair game is eight ends.
@@ -47,11 +47,11 @@ One rule worth flagging: every team must include both male and female players, a
 - **Hog line**: The line a stone must cross to be in play.
 
 ## Notable Records & Historical Context
-Wheelchair curling debuted at the Torino 2006 Paralympic Winter Games. Canada, skipped by Chris Daw, went undefeated and beat Great Britain in the final to capture the sport's first Paralympic gold.
+Wheelchair curling debuted at the Paralympic Winter Games Torino 2006. Canada went undefeated and beat Great Britain in the final to capture the sport's first Paralympic gold.
 
-Canada and China have dominated since. Canada won the first three Paralympic titles (2006, 2010, 2014), then China took gold at PyeongChang 2018 and Beijing 2022. At Milano Cortina 2026, Canada returned to the top of the podium with a perfect campaign, defeating China in the gold medal final for its fourth wheelchair curling gold and first since Sochi 2014. Canada has medaled at every Games since the sport was introduced.
+Canada and China have dominated since. Canada won the first three Paralympic titles (Paralympic Winter Games Torino 2006, Vancouver 2010, Sochi 2014), then China took gold at the Paralympic Winter Games PyeongChang 2018 and Beijing 2022. At the Paralympic Winter Games Milano Cortina 2026, Canada returned to the top of the podium with a perfect campaign, defeating China in the gold medal final for its fourth wheelchair curling gold and first since Sochi 2014. Canada has medaled at every Games since the sport was introduced.
 
-Milano Cortina 2026 also debuted wheelchair curling mixed doubles. China's Jinqiao Yang and Meng Wang won the inaugural gold 9 to 7 over Korea's Hyejin Baek and Yongsuk Lee in an extra end. Latvia took bronze 11 to 10 over the United States, the country's first ever Winter Paralympic medal.
+The Paralympic Winter Games Milano Cortina 2026 also debuted wheelchair curling mixed doubles. The Chinese pair won the inaugural gold 9 to 7 over the Korean pair in an extra end. Latvia took bronze 11 to 10 over the United States, the latter country's first ever Winter Paralympic medal in the sport.
 
 ## What to Look For
 Watch the delivery first. The thrower sits in a stationary wheelchair, often with a teammate bracing the chair from behind, and pushes the stone with a long extender stick that clips to the handle. The motion is slow and deliberate, more like a pool stroke than the explosive lunge of Olympic curling. Hand release is allowed too.

@@ -8,21 +8,21 @@ athletics
 
 ## Rules
 
-Para Athletics is the Paralympic version of track and field, governed by World Para Athletics under the International Paralympic Committee (IPC). The event slate mirrors the Olympic program: track events from 100m through the marathon (200m, 400m, 800m, 1500m, 5000m), relays such as the 4x100m universal, plus field events covering long jump, high jump, shot put, discus, javelin, and the club throw, unique to athletes with the most significant upper-limb impairments.
+Para Athletics is the Paralympic version of track and field, governed by the world para athletics body under the international Paralympic governing body. The event slate mirrors the Olympic program: track events from 100m through the marathon (200m, 400m, 800m, 1500m, 5000m), relays such as the 4x100m universal, plus field events covering long jump, high jump, shot put, discus, javelin, and the club throw, unique to athletes with the most significant upper-limb impairments.
 
-The structural difference from Olympic athletics is that every event is divided into sport classes (below). An athlete competes only against others in their class, so a single race distance can produce many separate gold medals. Within each class, the basic rules of running, jumping, and throwing follow World Athletics conventions with adaptations on top.
+The structural difference from Olympic athletics is that every event is divided into sport classes (below). An athlete competes only against others in their class, so a single race distance can produce many separate gold medals. Within each class, the basic rules of running, jumping, and throwing follow the conventions of the international governing body for athletics with adaptations on top.
 
 Equipment rules are class-specific. Wheelchair racers use three-wheeled racing chairs with strict dimensional limits. Athletes with leg amputations may use carbon-fiber running blades (energy-storing prostheses), capped at maximum allowable standing height. Seated throwers compete from a throwing frame anchored to the circle, with seat height capped near 75 centimeters and an optional vertical hold bar.
 
 For visually impaired track athletes, T11 runners compete with a guide attached by a tether: a non-elastic cord between 10 and 50 centimeters, attached at the hand or arm. The guide may not pull, push, or propel, and must not cross the finish line ahead of the athlete. Doing so is an automatic disqualification. T11 athletes also wear opaque blackout eyeshades to remove any advantage from residual light perception.
 
-False-start rules mirror World Athletics: any movement after "set" before the gun, or a reaction below 0.1 seconds, triggers a false start, and most championship races use "one and out." Start protocols for T11 and T12 allow the guide-athlete pair extra time in the blocks, and the starter coordinates the cue with both.
+False-start rules mirror those of the international governing body for athletics: any movement after "set" before the gun, or a reaction below 0.1 seconds, triggers a false start, and most championship races use "one and out." Start protocols for T11 and T12 allow the guide-athlete pair extra time in the blocks, and the starter coordinates the cue with both.
 
 ## Scoring
 
 Within each class, scoring is identical to Olympic athletics: shortest time wins on the track, longest distance wins in throws and horizontal jumps, greatest height wins in the high jump. World records are tracked separately for every class and every event, which is why a single championship can produce dozens of records in a week. A T54 100m world record and a T64 100m world record are entirely independent marks, set by athletes whose physical situations are not directly comparable.
 
-For combined-class events (used in field events when one class lacks enough entries for a standalone medal), World Para Athletics uses the Raza point score system. Raza converts a raw distance or time into a standardized point value via a Gompertz function with class-specific and event-specific constants. The closer the performance is to that class's world record, the higher the score, capped near 1200 points. The IPC adopted Raza in 2010 with a major recalibration in 2014.
+For combined-class events (used in field events when one class lacks enough entries for a standalone medal), the world para athletics body uses the Raza point score system. Raza converts a raw distance or time into a standardized point value via a Gompertz function with class-specific and event-specific constants. The closer the performance is to that class's world record, the higher the score, capped near 1200 points. The international Paralympic governing body adopted Raza in 2010 with a major recalibration in 2014.
 
 Disqualification triggers include the standard offenses (lane infringement, false start, jump and throw fouls) plus class-specific rules: a T11 whose guide finishes ahead is DQ'd, a wheelchair racer who deliberately blocks or makes a dangerous chair-on-chair contact can be removed, and athletes can face "intentional misrepresentation" sanctions if found to have exaggerated impairment during classification.
 
@@ -33,7 +33,7 @@ Para Athletics uses a two-letter prefix system: T for track and jumping events, 
 Visually Impaired (T/F11 to T/F13):
 - T/F11: Total or near-total blindness. T11 sprinters must run with a guide and wear blackout eyeshades.
 - T/F12: Low vision. The athlete can choose whether to use a guide.
-- T/F13: Moderate visual impairment. No guide permitted in track events under WPA rules.
+- T/F13: Moderate visual impairment. No guide permitted in track events under the rules of the world para athletics body.
 
 Intellectual Impairment (T/F20):
 - T/F20: IQ at or below 75 with onset before age 18 and significant adaptive-behavior limitations. Eligible events include 1500m, long jump, and shot put.
@@ -90,28 +90,28 @@ Standing Throws use various numbers from across the system (F35 to F38 for ambul
 - Universal relay (4x100m): Mixed-class relay with T11/12, T35-38, T42-47/61-64, and T51-54 legs.
 - Minimum impairment criteria (MIC): Threshold an athlete must meet to be eligible in a given class.
 - Sport class status (R, C, N): Review, Confirmed, or New. Indicates how settled a classification is.
-- WPA: World Para Athletics, the IPC sub-body that runs the sport.
-- IPC: International Paralympic Committee.
+- WPA: the world para athletics body, the sub-body of the international Paralympic governing body that runs the sport.
+- IPC: the international Paralympic governing body.
 - Club throw: Field event for F31, F32, F51 athletes, throwing a wooden club shaped like a bowling pin.
 - Frame anchor: Tie-down securing the throwing frame to the circle.
 
 ## Notable Records and Historical Context
 
-Records below were verified against World Para Athletics and Paralympic.org sources.
+Records below were verified against the world para athletics body and Paralympic.org sources.
 
-- Men's 100m T11: David Brown (USA) ran 10.92 in April 2014, the first totally blind athlete under 11 seconds, and the defining benchmark for the class.
-- Men's 1500m T13: Abdellatif Baka (Algeria) ran 3:48.29 to win Rio 2016 gold, faster than the Olympic 1500m winner that summer. He later ran 3:47.82 in Montreuil [VERIFY current ratification].
-- Men's 1500m T20: Ben Sandilands (Great Britain) ran 3:45.40 to win gold and set a world record at Paris 2024.
-- Men's 100m T64: Sherman Guity (Costa Rica) ran 10.65 for Paris 2024 gold, a Paralympic record. Felix Streng (Germany) won the prior cycle in Tokyo 2020 in 10.76.
-- Men's Long Jump T64: Markus Rehm (Germany) holds the world record at 8.72m, a mark that would have won several non-disabled Olympic long jump finals.
-- Men's Marathon T54: Marcel Hug (Switzerland) won Paris 2024 gold in 1:27:39 and set a course-record world best of 1:15:33 at the 2024 Boston Marathon.
-- Men's 100m T53: Brent Lakatos (Canada) ran 14.10 in May 2017, a long-standing benchmark for the class.
-- Men's Javelin F46: Sundar Singh Gurjar (India) set a world record of 68.60m at the 2023 Asian Para Games, surpassing the 67.79m mark Sri Lanka's Dinesh Priyantha set in Tokyo 2020 gold. Devendra Jhajharia (India) is the historical face of the event with prior records of 62.15m (2004) and 63.97m (Rio 2016).
-- Women's Shot Put F40: Lara Baars (Netherlands) won Paris 2024 gold with 9.10m, a Paralympic record [VERIFY current world record status].
+- Men's 100m T11: an American runner clocked 10.92 in April 2014, the first totally blind athlete under 11 seconds, and the defining benchmark for the class.
+- Men's 1500m T13: an Algerian runner clocked 3:48.29 to win Paralympic Games Rio 2016 gold, faster than the Olympic 1500m winner that summer. He later ran 3:47.82 in Montreuil [VERIFY current ratification].
+- Men's 1500m T20: a British runner clocked 3:45.40 to win gold and set a world record at the Paralympic Games Paris 2024.
+- Men's 100m T64: a Costa Rican sprinter ran 10.65 for Paralympic Games Paris 2024 gold, a Paralympic record. A German blade runner won the prior cycle at the Paralympic Games Tokyo 2020 in 10.76.
+- Men's Long Jump T64: a German jumper holds the world record at 8.72m, a mark that would have won several non-disabled Olympic long jump finals.
+- Men's Marathon T54: a Swiss wheelchair racer won Paralympic Games Paris 2024 gold in 1:27:39 and set a course-record world best of 1:15:33 at the 2024 Boston Marathon.
+- Men's 100m T53: a Canadian wheelchair racer clocked 14.10 in May 2017, a long-standing benchmark for the class.
+- Men's Javelin F46: an Indian thrower set a world record of 68.60m at the 2023 Asian Para Games, surpassing a 67.79m mark a Sri Lankan thrower set en route to Paralympic Games Tokyo 2020 gold. The historical face of the event is another Indian thrower with prior records of 62.15m (2004) and 63.97m (Paralympic Games Rio 2016).
+- Women's Shot Put F40: a Dutch thrower won Paralympic Games Paris 2024 gold with 9.10m, a Paralympic record [VERIFY current world record status].
 
-On medal history, the all-time Paralympic table is led by the United States with over 2,600 medals across Summer and Winter Games. Great Britain, China, Germany, and Australia round out the historical top tier. At Paris 2024, China topped the table with 95 golds, Great Britain was second, the United States third, and Brazil cemented itself as a top-five force.
+On medal history, the all-time Paralympic table is led by the United States with over 2,600 medals across Summer and Winter Games. Great Britain, China, Germany, and Australia round out the historical top tier. At the Paralympic Games Paris 2024, China topped the table with 95 golds, Great Britain was second, the United States third, and Brazil cemented itself as a top-five force.
 
-A pivotal moment for Para Athletics came at London 2012, when guide runners were awarded medals alongside their athletes for the first time. Before then, the guide stood on the field but received nothing on the podium. The change formally recognized that a T11 race is a two-person performance.
+A pivotal moment for Para Athletics came at the Paralympic Games London 2012, when guide runners were awarded medals alongside their athletes for the first time. Before then, the guide stood on the field but received nothing on the podium. The change formally recognized that a T11 race is a two-person performance.
 
 ## What to Look For
 

@@ -11,7 +11,7 @@ def test_retriever_returns_most_similar_chunk_first():
     chunks = [
         _chunk("a", "curling", "Rules", "Curling stones slide on ice toward the house"),
         _chunk("b", "athletics", "Rules", "Sprinters run in lanes from blocks"),
-        _chunk("c", "athletics", "Records", "Bolt set the 100m world record at 9.58"),
+        _chunk("c", "athletics", "Records", "100m world record stands at 9.58 seconds"),
     ]
     retriever = Retriever(chunks, HashedBowEmbedder())
 

@@ -10,13 +10,13 @@ None
 
 Para Alpine Skiing is contested at the Paralympic Winter Games across the same five disciplines as Olympic alpine racing: Downhill, Super-G, Giant Slalom, Slalom, and Super Combined (one Super-G run plus one Slalom run). Athletes race against the clock down a gated course, and the fastest factored time wins. Slalom and Giant Slalom are decided over two combined runs.
 
-Course standards mirror able-bodied World Cup events. Vertical drops, gate spacing, and snow preparation follow International Ski Federation (FIS) specifications, with adjustments made for sitting-class safety and visually impaired visibility. Athletes complete inspection runs before racing, sliding alongside the gates without skiing them to memorize line and rhythm.
+Course standards mirror able-bodied World Cup events. Vertical drops, gate spacing, and snow preparation follow the international ski federation's specifications, with adjustments made for sitting-class safety and visually impaired visibility. Athletes complete inspection runs before racing, sliding alongside the gates without skiing them to memorize line and rhythm.
 
 Equipment varies dramatically by classification. Sitting-class skiers race on a sit-ski (also called a mono-ski), a molded bucket seat mounted on a shock-absorbing frame above a single ski, steered with two short outriggers (forearm crutches with miniature ski tips) for balance. Standing skiers may use one or two skis, one or two poles, and prosthetics or outriggers depending on their impairment. Visually impaired skiers use standard alpine equipment.
 
 Visually impaired athletes ski with a sighted guide, and the pair is treated as a single competing unit. Guide and athlete communicate via Bluetooth helmet headsets, with the guide calling turns, terrain, and gates in real time. The guide may ski ahead of, behind, or alongside the athlete depending on class and preference, but the two cannot make physical contact. Both must complete the course, and both receive medals.
 
-Times are not compared raw. Each finishing time is multiplied by a percentage factor assigned to the athlete's classification, producing a "factored time" that is the official scoring time. The system, in place since the Torino 2006 Paralympics, lets athletes from different classes within the same category compete in a single combined medal event. Factors are recalculated annually based on more than 400 elite races over a four-year window.
+Times are not compared raw. Each finishing time is multiplied by a percentage factor assigned to the athlete's classification, producing a "factored time" that is the official scoring time. The system, in place since the Paralympic Winter Games Torino 2006, lets athletes from different classes within the same category compete in a single combined medal event. Factors are recalculated annually based on more than 400 elite races over a four-year window.
 
 ## Scoring
 
@@ -26,7 +26,7 @@ This is the most counterintuitive thing for new viewers. The clock you see at th
 
 ## Classifications
 
-Classifications are governed by the International Paralympic Committee and World Para Snow Sports. Codes use "LW" (locomotor winter) for physical impairments and "B" for vision impairments.
+Classifications are governed by the international Paralympic governing body and the world para snow sports authority. Codes use "LW" (locomotor winter) for physical impairments and "B" for vision impairments.
 
 **STANDING (LW1 to LW9)**
 
@@ -74,11 +74,11 @@ Classifications are governed by the International Paralympic Committee and World
 
 ## Notable Records & Historical Context
 
-Para Alpine Skiing debuted at the first Winter Paralympics in Ornskoldsvik, Sweden in 1976 with Slalom and Giant Slalom for standing skiers. Downhill was added at Innsbruck 1984, sit-ski racing became fully medaled in the 1990s, and Super-G joined at Lillehammer 1994.
+Para Alpine Skiing debuted at the first Paralympic Winter Games in Ornskoldsvik, Sweden in 1976 with Slalom and Giant Slalom for standing skiers. Downhill was added at the Paralympic Winter Games Innsbruck 1984, sit-ski racing became fully medaled in the 1990s, and Super-G joined at the Paralympic Winter Games Lillehammer 1994.
 
 Austria is the most decorated nation in the discipline, with roughly 280 all-time Paralympic medals (around 94 golds). Austria and the United States have each topped the alpine medal table at four Paralympic Winter Games, more than any other country, with France, Germany, Norway, and Switzerland also consistent powers.
 
-Germany's Gerd Schoenfelder is the most decorated Para alpine skier in history, with 22 Paralympic medals (16 gold, 4 silver, 2 bronze) across six Games from Albertville 1992 to Vancouver 2010. Reinhild Moeller, also of Germany, is the most decorated woman in the sport with 19 medals. Norway's Ragnhild Myklebust holds the all-sport Winter Paralympic record with 27 medals (22 gold) across alpine, Nordic, and biathlon between 1988 and 2002. France's Marie Bochet, born without a left forearm, swept all four standing events at PyeongChang 2018.
+The most decorated Para alpine skier in history is a German man with 22 Paralympic medals (16 gold, 4 silver, 2 bronze) across six Games from the Paralympic Winter Games Albertville 1992 to Vancouver 2010. The most decorated woman in the sport is also German, with 19 medals. The all-sport Winter Paralympic medal record holder is a Norwegian with 27 medals (22 gold) across alpine, Nordic, and biathlon between 1988 and 2002. A French standing skier born without a left forearm swept all four standing events at the Paralympic Winter Games PyeongChang 2018.
 
 ## What to Look For
 

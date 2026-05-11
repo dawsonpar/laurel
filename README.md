@@ -12,6 +12,24 @@ Built for the [Team USA × Google Cloud Hackathon](https://vibecodeforgoldwithgo
 
 ---
 
+## Contents
+
+- [Status](#status)
+- [Try it without installing](#try-it-without-installing)
+- [Two scenarios](#two-scenarios)
+- [Stack](#stack)
+- [Features at a glance](#features-at-a-glance)
+- [Repo layout](#repo-layout)
+- [Reproducible testing](#reproducible-testing)
+  - [Google Cloud integration (proof)](#google-cloud-integration-proof)
+- [Deploying](#deploying)
+- [MVP sport coverage](#mvp-sport-coverage)
+- [Documentation](#documentation)
+- [Compliance notes (for hackathon judges)](#compliance-notes-for-hackathon-judges)
+- [License](#license)
+
+---
+
 ## Status
 
 | | |

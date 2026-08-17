@@ -158,7 +158,8 @@ Full architecture diagram and rationale: [ADR-0001](https://github.com/dawsonpar
 - **Live app:** https://laurel-dawsonpars-projects.vercel.app
 - **Demos:** https://laurel-dawsonpars-projects.vercel.app/demo
 - **Source code:** https://github.com/dawsonpar/laurel
-- **Demo video:** _[paste YouTube link once upload finishes]_
+- **Demo video:** https://www.youtube.com/watch?v=Jjt8iwyssoU
+- **Devpost submission:** https://devpost.com/software/laurel
 
 ---
 

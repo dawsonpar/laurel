@@ -61,5 +61,5 @@ backend/tmp/
 tmp/
 
 # Claude Code coordination (per CLAUDE.md)
-.claude-coord/
+.agent-contracts/
 .vercel
